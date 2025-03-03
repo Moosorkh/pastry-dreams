@@ -12,7 +12,7 @@ interface MasonryGridProps {
 }
 
 const MasonryGrid: React.FC<MasonryGridProps> = ({ images, columns = 3 }) => {
-  const [columnHeights, setColumnHeights] = useState<number[]>(Array(columns).fill(0));
+  const [, setColumnHeights] = useState<number[]>(Array(columns).fill(0));
   const [layout, setLayout] = useState<typeof images[]>(Array(columns).fill([]));
 
   useEffect(() => {

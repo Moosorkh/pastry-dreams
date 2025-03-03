@@ -8,7 +8,6 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   InputAdornment,
-  Chip,
 } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
 import RecipeCard from '../components/features/recipes/RecipeCard';
@@ -58,7 +57,7 @@ export default function Recipes() {
   const [selectedDifficulty, setSelectedDifficulty] = useState('All');
 
   const handleCategoryChange = (
-    event: React.MouseEvent<HTMLElement>,
+    _event: React.MouseEvent<HTMLElement>,
     newCategory: string | null
   ) => {
     if (newCategory !== null) {
@@ -67,7 +66,7 @@ export default function Recipes() {
   };
 
   const handleDifficultyChange = (
-    event: React.MouseEvent<HTMLElement>,
+    _event: React.MouseEvent<HTMLElement>,
     newDifficulty: string | null
   ) => {
     if (newDifficulty !== null) {

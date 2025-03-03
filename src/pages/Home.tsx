@@ -8,7 +8,6 @@ import {
   CardContent,
   CardMedia,
   Button,
-  Link,
   Paper,
 } from '@mui/material';
 

@@ -56,7 +56,7 @@ export default function Gallery() {
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
 
   const handleCategoryChange = (
-    event: React.MouseEvent<HTMLElement>,
+    _event: React.MouseEvent<HTMLElement>,
     newCategory: string,
   ) => {
     if (newCategory !== null) {

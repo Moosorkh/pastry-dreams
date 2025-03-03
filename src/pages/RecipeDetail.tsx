@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams, Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import {
   Container,
   Typography,
@@ -74,7 +74,7 @@ const difficultyColors = {
 } as const;
 
 export default function RecipeDetail() {
-  const { id } = useParams<{ id: string }>();
+ // const { id } = useParams<{ id: string }>();
   const [servings, setServings] = useState(recipeData.servings);
 
   // Function to adjust ingredient quantities based on serving size

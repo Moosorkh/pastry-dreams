@@ -13,8 +13,6 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
-  useTheme,
-  useMediaQuery,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
@@ -29,9 +27,6 @@ const pages = [
 export default function Layout() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };

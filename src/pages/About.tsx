@@ -6,7 +6,6 @@ import {
     Paper,
     Card,
     CardContent,
-    Stack,
   } from '@mui/material';
   import Timeline from '@mui/lab/Timeline';
   import TimelineItem from '@mui/lab/TimelineItem';
