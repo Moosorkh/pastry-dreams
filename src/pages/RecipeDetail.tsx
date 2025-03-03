@@ -1,36 +1,52 @@
 import { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ClockIcon, UserIcon, ScaleIcon } from '@heroicons/react/24/outline';
-import Button from '../components/ui/Button';
-
-interface RecipeDetailType {
-  title: string;
-  description: string;
-  prepTime: string;
-  cookTime: string;
-  servings: number;
-  difficulty: 'Easy' | 'Medium' | 'Hard';
-  ingredients: string[];
-  instructions: string[];
-  tips: string[];
-  image: string;
-}
+import { useParams, Link as RouterLink } from 'react-router-dom';
+import {
+  Container,
+  Typography,
+  Box,
+  Grid,
+  Paper,
+  Chip,
+  Divider,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  ButtonGroup,
+  Button,
+  Breadcrumbs,
+  Link,
+  Rating,
+} from '@mui/material';
+import {
+  AccessTime as AccessTimeIcon,
+  Restaurant as RestaurantIcon,
+  LocalDining as DiningIcon,
+  ArrowBack as ArrowBackIcon,
+  Add as AddIcon,
+  Remove as RemoveIcon,
+} from '@mui/icons-material';
 
 // This would typically come from an API
-const recipeData: RecipeDetailType = {
+const recipeData = {
+  id: '1',
   title: 'Classic French Macarons',
   description: 'Delicate almond meringue cookies with a smooth ganache filling. Perfect for special occasions or afternoon tea.',
+  difficulty: 'Hard' as const,
+  category: 'Cookies',
   prepTime: '30 minutes',
   cookTime: '20 minutes',
   servings: 24,
-  difficulty: 'Hard',
+  rating: 4.8,
+  image: '/api/placeholder/800/400',
   ingredients: [
     '100g ground almonds',
     '100g powdered sugar',
-    '2 large egg whites',
+    '2 large egg whites (aged overnight)',
     '50g granulated sugar',
     'Food coloring (optional)',
+    '150g heavy cream',
+    '150g chocolate (for filling)',
   ],
   instructions: [
     'Sift ground almonds and powdered sugar together in a bowl.',
@@ -39,153 +55,197 @@ const recipeData: RecipeDetailType = {
     'Pipe small circles onto parchment-lined baking sheets.',
     'Let rest for 30 minutes until a skin forms on top.',
     'Bake at 150°C (300°F) for 15-20 minutes.',
+    'Let cool completely before filling.',
+    'For the ganache filling, heat cream and pour over chopped chocolate. Stir until smooth.',
+    'Once cooled, pipe filling between two macaron shells.',
   ],
   tips: [
-    'Make sure all ingredients are at room temperature.',
-    'Age your egg whites for 24-48 hours for best results.',
-    'Tap the baking sheet on the counter to remove air bubbles.',
+    'Make sure all ingredients are at room temperature',
+    'Age your egg whites for 24-48 hours for best results',
+    'Tap the baking sheet on the counter to remove air bubbles',
+    'Use a template under parchment paper for consistent sizes',
   ],
-  image: '/api/placeholder/800/400'
 };
 
+const difficultyColors = {
+  Easy: 'success',
+  Medium: 'warning',
+  Hard: 'error',
+} as const;
+
 export default function RecipeDetail() {
-  const { slug } = useParams<{ slug: string }>();
-  const [servingMultiplier, setServingMultiplier] = useState(1);
+  const { id } = useParams<{ id: string }>();
+  const [servings, setServings] = useState(recipeData.servings);
 
-  // In a real app, you would fetch the recipe data based on the slug
-  const recipe = recipeData;
-
-  // Function to adjust ingredient quantities based on serving multiplier
+  // Function to adjust ingredient quantities based on serving size
   const adjustQuantity = (ingredient: string) => {
-    const match = ingredient.match(/^(\d+(?:\.\d+)?)(g|ml|cups?|tbsp|tsp|)(\s.*)/);
+    const match = ingredient.match(/^(\d+(?:\.\d+)?)([a-zA-Z]+)\s(.+)/);
     if (match) {
-      const [_, quantity, unit, rest] = match;
-      const adjustedQuantity = (parseFloat(quantity) * servingMultiplier).toFixed(1);
-      return `${adjustedQuantity}${unit}${rest}`;
+      const [_, amount, unit, item] = match;
+      const adjustedAmount = (parseFloat(amount) * servings / recipeData.servings).toFixed(0);
+      return `${adjustedAmount}${unit} ${item}`;
     }
     return ingredient;
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        {/* Breadcrumb */}
-        <nav className="mb-8">
-          <ol className="flex items-center space-x-2 text-sm text-gray-500">
-            <li><Link to="/recipes" className="hover:text-primary-600">Recipes</Link></li>
-            <li>•</li>
-            <li className="text-gray-900">{recipe.title}</li>
-          </ol>
-        </nav>
+    <Container maxWidth="lg">
+      <Box sx={{ py: 4 }}>
+        {/* Breadcrumbs */}
+        <Breadcrumbs sx={{ mb: 2 }}>
+          <Link component={RouterLink} to="/recipes" color="inherit" sx={{ display: 'flex', alignItems: 'center' }}>
+            <ArrowBackIcon sx={{ mr: 0.5 }} fontSize="small" />
+            Recipes
+          </Link>
+          <Typography color="text.primary">{recipeData.title}</Typography>
+        </Breadcrumbs>
 
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-serif font-bold text-gray-900 mb-4">{recipe.title}</h1>
-          <p className="text-lg text-gray-600 mb-6">{recipe.description}</p>
+        {/* Recipe Header */}
+        <Box sx={{ mb: 6 }}>
+          <Typography variant="h2" component="h1" sx={{ fontFamily: 'Playfair Display', mb: 2 }}>
+            {recipeData.title}
+          </Typography>
           
-          <div className="flex flex-wrap gap-6 text-sm text-gray-500">
-            <div className="flex items-center">
-              <ClockIcon className="h-5 w-5 mr-2" />
-              <span>Prep: {recipe.prepTime}</span>
-            </div>
-            <div className="flex items-center">
-              <ClockIcon className="h-5 w-5 mr-2" />
-              <span>Cook: {recipe.cookTime}</span>
-            </div>
-            <div className="flex items-center">
-              <UserIcon className="h-5 w-5 mr-2" />
-              <span>Serves: {recipe.servings * servingMultiplier}</span>
-            </div>
-            <div className="flex items-center">
-              <ScaleIcon className="h-5 w-5 mr-2" />
-              <span>Difficulty: {recipe.difficulty}</span>
-            </div>
-          </div>
-        </div>
+          <Box sx={{ mb: 3 }}>
+            <Rating value={recipeData.rating} precision={0.1} readOnly sx={{ mb: 1 }} />
+            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+              <Chip
+                label={recipeData.difficulty}
+                color={difficultyColors[recipeData.difficulty]}
+                size="small"
+              />
+              <Chip
+                label={recipeData.category}
+                variant="outlined"
+                size="small"
+              />
+              <Chip
+                icon={<AccessTimeIcon />}
+                label={`Prep: ${recipeData.prepTime}`}
+                variant="outlined"
+                size="small"
+              />
+              <Chip
+                icon={<DiningIcon />}
+                label={`Cook: ${recipeData.cookTime}`}
+                variant="outlined"
+                size="small"
+              />
+            </Box>
+          </Box>
 
-        {/* Image */}
-        <div className="mb-12">
+          <Typography variant="subtitle1" color="text.secondary" paragraph>
+            {recipeData.description}
+          </Typography>
+        </Box>
+
+        {/* Recipe Image */}
+        <Paper 
+          elevation={2} 
+          sx={{ 
+            mb: 6,
+            overflow: 'hidden',
+            borderRadius: 2,
+          }}
+        >
           <img
-            src={recipe.image}
-            alt={recipe.title}
-            className="w-full h-96 object-cover rounded-lg shadow-lg"
+            src={recipeData.image}
+            alt={recipeData.title}
+            style={{ width: '100%', height: 'auto', display: 'block' }}
           />
-        </div>
+        </Paper>
 
-        {/* Servings Adjuster */}
-        <div className="mb-8">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Adjust servings</label>
-          <div className="flex items-center space-x-4">
-            <Button
-              size="sm"
-              onClick={() => setServingMultiplier(prev => Math.max(0.5, prev - 0.5))}
-            >
-              -
-            </Button>
-            <span className="text-lg font-medium">{recipe.servings * servingMultiplier} servings</span>
-            <Button
-              size="sm"
-              onClick={() => setServingMultiplier(prev => prev + 0.5)}
-            >
-              +
-            </Button>
-          </div>
-        </div>
-
-        {/* Recipe Content */}
-        <div className="grid md:grid-cols-2 gap-8">
+        <Grid container spacing={6}>
           {/* Ingredients */}
-          <div>
-            <h2 className="text-2xl font-serif font-bold mb-4">Ingredients</h2>
-            <ul className="space-y-2">
-              {recipe.ingredients.map((ingredient, index) => (
-                <li key={index} className="flex items-start">
-                  <span className="h-6 w-6 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center mr-2 flex-shrink-0">
-                    {index + 1}
-                  </span>
-                  <span>{adjustQuantity(ingredient)}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <Grid item xs={12} md={4}>
+            <Paper sx={{ p: 3, height: '100%' }}>
+              <Typography variant="h5" gutterBottom sx={{ fontFamily: 'Playfair Display' }}>
+                Ingredients
+              </Typography>
+              
+              <Box sx={{ mb: 3 }}>
+                <Typography variant="subtitle2" gutterBottom>
+                  Servings
+                </Typography>
+                <ButtonGroup size="small">
+                  <Button
+                    onClick={() => setServings(prev => Math.max(1, prev - 1))}
+                    startIcon={<RemoveIcon />}
+                  >
+                    Less
+                  </Button>
+                  <Button disabled>
+                    {servings}
+                  </Button>
+                  <Button
+                    onClick={() => setServings(prev => prev + 1)}
+                    startIcon={<AddIcon />}
+                  >
+                    More
+                  </Button>
+                </ButtonGroup>
+              </Box>
 
-          {/* Instructions */}
-          <div>
-            <h2 className="text-2xl font-serif font-bold mb-4">Instructions</h2>
-            <ol className="space-y-4">
-              {recipe.instructions.map((instruction, index) => (
-                <li key={index} className="flex items-start">
-                  <span className="h-6 w-6 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center mr-2 flex-shrink-0">
-                    {index + 1}
-                  </span>
-                  <span>{instruction}</span>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </div>
+              <Divider sx={{ my: 2 }} />
 
-        {/* Tips */}
-        <div className="mt-12">
-          <h2 className="text-2xl font-serif font-bold mb-4">Tips for Success</h2>
-          <div className="bg-primary-50 rounded-lg p-6">
-            <ul className="space-y-2">
-              {recipe.tips.map((tip, index) => (
-                <li key={index} className="flex items-start">
-                  <span className="h-6 w-6 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center mr-2 flex-shrink-0">
-                    ✓
-                  </span>
-                  <span>{tip}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </motion.div>
-    </div>
+              <List>
+                {recipeData.ingredients.map((ingredient, index) => (
+                  <ListItem key={index} sx={{ px: 0 }}>
+                    <ListItemIcon sx={{ minWidth: 32 }}>
+                      <RestaurantIcon color="primary" fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText primary={adjustQuantity(ingredient)} />
+                  </ListItem>
+                ))}
+              </List>
+            </Paper>
+          </Grid>
+
+          {/* Instructions and Tips */}
+          <Grid item xs={12} md={8}>
+            <Paper sx={{ p: 3, mb: 4 }}>
+              <Typography variant="h5" gutterBottom sx={{ fontFamily: 'Playfair Display' }}>
+                Instructions
+              </Typography>
+              <List>
+                {recipeData.instructions.map((instruction, index) => (
+                  <ListItem key={index} sx={{ px: 0 }}>
+                    <ListItemIcon>
+                      <Typography variant="h6" color="primary">
+                        {index + 1}.
+                      </Typography>
+                    </ListItemIcon>
+                    <ListItemText primary={instruction} />
+                  </ListItem>
+                ))}
+              </List>
+            </Paper>
+
+            <Paper sx={{ p: 3, bgcolor: 'primary.light' }}>
+              <Typography variant="h5" gutterBottom sx={{ fontFamily: 'Playfair Display', color: 'primary.contrastText' }}>
+                Pro Tips
+              </Typography>
+              <List>
+                {recipeData.tips.map((tip, index) => (
+                  <ListItem key={index} sx={{ px: 0 }}>
+                    <ListItemIcon sx={{ color: 'primary.contrastText' }}>
+                      <Typography variant="body1">•</Typography>
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary={tip} 
+                      sx={{ 
+                        '& .MuiListItemText-primary': { 
+                          color: 'primary.contrastText' 
+                        } 
+                      }} 
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            </Paper>
+          </Grid>
+        </Grid>
+      </Box>
+    </Container>
   );
 }

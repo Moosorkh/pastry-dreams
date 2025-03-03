@@ -1,3 +1,17 @@
+import { ReactElement } from 'react';
+
+export interface Achievement {
+    year: string;
+    title: string;
+    description: string;
+    icon: ReactElement;
+  }
+  
+  export interface Specialty {
+    title: string;
+    description: string;
+  }
+
 // Recipe Types
 export interface Recipe {
     id: string;

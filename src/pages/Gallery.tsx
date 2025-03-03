@@ -1,27 +1,48 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import MasonryGrid from '../components/features/gallery/MasonryGrid';
-import Button from '../components/ui/Button';
+import {
+  Box,
+  Container,
+  Typography,
+  ImageList,
+  ImageListItem,
+  ToggleButton,
+  ToggleButtonGroup,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 
-// This would typically come from your backend
 const galleryItems = [
   {
-    id: '1',
-    src: '/api/placeholder/600/800',
-    alt: 'Wedding Cake with Roses',
-    category: 'Cakes'
+    img: '/api/placeholder/600/800',
+    title: 'Wedding Cake with Roses',
+    category: 'Cakes',
+    featured: true,
   },
   {
-    id: '2',
-    src: '/api/placeholder/600/600',
-    alt: 'French Macarons',
-    category: 'Pastries'
+    img: '/api/placeholder/600/600',
+    title: 'French Macarons',
+    category: 'Pastries',
   },
   {
-    id: '3',
-    src: '/api/placeholder/600/700',
-    alt: 'Birthday Cake',
-    category: 'Cakes'
+    img: '/api/placeholder/600/800',
+    title: 'Birthday Cake',
+    category: 'Cakes',
+  },
+  {
+    img: '/api/placeholder/600/600',
+    title: 'Artisan Croissants',
+    category: 'Breads',
+  },
+  {
+    img: '/api/placeholder/800/600',
+    title: 'Custom Wedding Cake',
+    category: 'Custom Orders',
+    featured: true,
+  },
+  {
+    img: '/api/placeholder/600/600',
+    title: 'Chocolate Eclairs',
+    category: 'Pastries',
   },
   // Add more items as needed
 ];
@@ -30,99 +51,159 @@ const categories = ['All', 'Cakes', 'Pastries', 'Breads', 'Custom Orders'];
 
 export default function Gallery() {
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<typeof galleryItems[0] | null>(null);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
 
-  const filteredImages = selectedCategory === 'All'
+  const handleCategoryChange = (
+    event: React.MouseEvent<HTMLElement>,
+    newCategory: string,
+  ) => {
+    if (newCategory !== null) {
+      setSelectedCategory(newCategory);
+    }
+  };
+
+  const filteredItems = selectedCategory === 'All'
     ? galleryItems
     : galleryItems.filter(item => item.category === selectedCategory);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
-      {/* Header */}
-      <div className="text-center mb-12">
-        <motion.h1 
-          className="text-4xl font-serif font-bold text-gray-900 sm:text-5xl mb-4"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+    <Container maxWidth="xl">
+      <Box sx={{ py: 8 }}>
+        <Typography 
+          variant="h2" 
+          component="h1" 
+          align="center" 
+          sx={{ 
+            mb: 2,
+            fontFamily: 'Playfair Display',
+            color: 'text.primary'
+          }}
         >
           Gallery
-        </motion.h1>
-        <motion.p 
-          className="text-lg text-gray-600 max-w-2xl mx-auto"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+        </Typography>
+        <Typography 
+          variant="h6" 
+          align="center" 
+          color="text.secondary" 
+          sx={{ mb: 6 }}
         >
           Explore our collection of handcrafted pastries, custom cakes, and artisanal breads.
-        </motion.p>
-      </div>
+        </Typography>
 
-      {/* Category Filter */}
-      <div className="flex flex-wrap justify-center gap-3 mb-12">
-        {categories.map((category) => (
-          <Button
-            key={category}
-            variant={selectedCategory === category ? 'primary' : 'outline'}
-            size="sm"
-            onClick={() => setSelectedCategory(category)}
-            className="min-w-[100px]"
+        {/* Category Filter */}
+        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 6 }}>
+          <ToggleButtonGroup
+            value={selectedCategory}
+            exclusive
+            onChange={handleCategoryChange}
+            aria-label="category filter"
+            sx={{
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              '& .MuiToggleButton-root': {
+                borderRadius: 2,
+                m: 0.5,
+                textTransform: 'none',
+                fontSize: '0.9rem',
+              },
+            }}
           >
-            {category}
-          </Button>
-        ))}
-      </div>
+            {categories.map((category) => (
+              <ToggleButton 
+                key={category} 
+                value={category}
+                sx={{
+                  '&.Mui-selected': {
+                    backgroundColor: 'primary.main',
+                    color: 'white',
+                    '&:hover': {
+                      backgroundColor: 'primary.dark',
+                    },
+                  },
+                }}
+              >
+                {category}
+              </ToggleButton>
+            ))}
+          </ToggleButtonGroup>
+        </Box>
 
-      {/* Gallery Grid */}
-      <motion.div
-        layout
-        className="w-full"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        <MasonryGrid 
-          images={filteredImages}
-          columns={3}
-        />
-      </motion.div>
-
-      {/* Modal */}
-      <AnimatePresence>
-        {isModalOpen && selectedImage && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4"
-            onClick={() => setIsModalOpen(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.9 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.9 }}
-              className="relative max-w-4xl w-full"
-              onClick={e => e.stopPropagation()}
+        {/* Gallery Grid */}
+        <ImageList 
+          variant="masonry" 
+          cols={isMobile ? 1 : isTablet ? 2 : 3} 
+          gap={24}
+          sx={{ 
+            mb: 8,
+            '& .MuiImageListItem-root': {
+              overflow: 'hidden',
+              borderRadius: 2,
+              boxShadow: 1,
+              transition: 'all 0.3s ease-in-out',
+              '&:hover': {
+                boxShadow: 6,
+                transform: 'scale(1.02)',
+              },
+            },
+          }}
+        >
+          {filteredItems.map((item) => (
+            <ImageListItem 
+              key={item.title}
+              sx={{ 
+                cursor: 'pointer',
+                position: 'relative',
+                '&::after': {
+                  content: '""',
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: '30%',
+                  background: 'linear-gradient(transparent, rgba(0,0,0,0.7))',
+                  transition: 'opacity 0.3s',
+                  opacity: 0,
+                },
+                '&:hover::after': {
+                  opacity: 1,
+                },
+                '&:hover .image-title': {
+                  opacity: 1,
+                },
+              }}
             >
               <img
-                src={selectedImage.src}
-                alt={selectedImage.alt}
-                className="w-full h-auto rounded-lg"
+                src={item.img}
+                alt={item.title}
+                loading="lazy"
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  display: 'block',
+                }}
               />
-              <button
-                className="absolute top-4 right-4 text-white hover:text-gray-300"
-                onClick={() => setIsModalOpen(false)}
+              <Typography
+                className="image-title"
+                sx={{
+                  position: 'absolute',
+                  bottom: 16,
+                  left: 16,
+                  color: 'white',
+                  zIndex: 1,
+                  opacity: 0,
+                  transition: 'opacity 0.3s',
+                  fontFamily: 'Playfair Display',
+                }}
+                variant="h6"
               >
-                <span className="sr-only">Close</span>
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+                {item.title}
+              </Typography>
+            </ImageListItem>
+          ))}
+        </ImageList>
+      </Box>
+    </Container>
   );
 }

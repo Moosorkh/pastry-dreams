@@ -1,21 +1,32 @@
-import { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import RecipeCard, { Recipe } from '../components/features/recipes/RecipeCard';
-import Button from '../components/ui/Button';
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { useState } from 'react';
+import {
+  Container,
+  Typography,
+  Box,
+  Grid,
+  TextField,
+  ToggleButton,
+  ToggleButtonGroup,
+  InputAdornment,
+  Chip,
+} from '@mui/material';
+import { Search as SearchIcon } from '@mui/icons-material';
+import RecipeCard from '../components/features/recipes/RecipeCard';
 
-// Sample data - would typically come from an API
-const sampleRecipes: Recipe[] = [
+const categories = ['All', 'Cakes', 'Cookies', 'Breads', 'Desserts', 'Pastries'];
+const difficulties = ['All', 'Easy', 'Medium', 'Hard'] as const;
+
+const recipes = [
   {
     id: '1',
     title: 'Classic French Macarons',
     description: 'Delicate almond meringue cookies with a smooth ganache filling. Perfect for special occasions or afternoon tea.',
     prepTime: '30m',
     cookTime: '20m',
-    difficulty: 'Hard',
+    difficulty: 'Hard' as const,
     category: 'Cookies',
-    image: '/api/placeholder/600/400',
-    slug: 'classic-french-macarons'
+    image: '/api/placeholder/400/300',
+    timeNeeded: '30m prep•20m cook',
   },
   {
     id: '2',
@@ -23,127 +34,184 @@ const sampleRecipes: Recipe[] = [
     description: 'Light and airy chocolate soufflé that rises to perfection. A classic French dessert that never fails to impress.',
     prepTime: '20m',
     cookTime: '15m',
-    difficulty: 'Medium',
+    difficulty: 'Medium' as const,
     category: 'Desserts',
-    image: '/api/placeholder/600/400',
-    slug: 'chocolate-souffle'
+    image: '/api/placeholder/400/300',
+    timeNeeded: '20m prep•15m cook',
   },
-  // Add more recipes as needed
+  {
+    id: '3',
+    title: 'Artisan Croissants',
+    description: 'Flaky, buttery croissants made from scratch. The ultimate French breakfast pastry.',
+    prepTime: '45m',
+    cookTime: '25m',
+    difficulty: 'Hard' as const,
+    category: 'Breads',
+    image: '/api/placeholder/400/300',
+    timeNeeded: '45m prep•25m cook',
+  },
 ];
-
-const categories = ['All', 'Cakes', 'Cookies', 'Breads', 'Desserts', 'Pastries'];
-const difficulties = ['All', 'Easy', 'Medium', 'Hard'];
 
 export default function Recipes() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedDifficulty, setSelectedDifficulty] = useState('All');
 
-  const filteredRecipes = useMemo(() => {
-    return sampleRecipes.filter(recipe => {
-      const matchesSearch = recipe.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          recipe.description.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesCategory = selectedCategory === 'All' || recipe.category === selectedCategory;
-      const matchesDifficulty = selectedDifficulty === 'All' || recipe.difficulty === selectedDifficulty;
-      
-      return matchesSearch && matchesCategory && matchesDifficulty;
-    });
-  }, [searchQuery, selectedCategory, selectedDifficulty]);
+  const handleCategoryChange = (
+    event: React.MouseEvent<HTMLElement>,
+    newCategory: string | null
+  ) => {
+    if (newCategory !== null) {
+      setSelectedCategory(newCategory);
+    }
+  };
+
+  const handleDifficultyChange = (
+    event: React.MouseEvent<HTMLElement>,
+    newDifficulty: string | null
+  ) => {
+    if (newDifficulty !== null) {
+      setSelectedDifficulty(newDifficulty);
+    }
+  };
+
+  const filteredRecipes = recipes.filter(recipe => {
+    const matchesSearch = recipe.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        recipe.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory === 'All' || recipe.category === selectedCategory;
+    const matchesDifficulty = selectedDifficulty === 'All' || recipe.difficulty === selectedDifficulty;
+    
+    return matchesSearch && matchesCategory && matchesDifficulty;
+  });
 
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
-      {/* Header */}
-      <div className="text-center mb-12">
-        <motion.h1 
-          className="text-4xl font-serif font-bold text-gray-900 sm:text-5xl mb-4"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+    <Container maxWidth="xl">
+      <Box sx={{ py: 8 }}>
+        <Typography 
+          variant="h2" 
+          component="h1" 
+          align="center" 
+          gutterBottom
+          sx={{ fontFamily: 'Playfair Display' }}
         >
           Recipes
-        </motion.h1>
-        <motion.p 
-          className="text-lg text-gray-600 max-w-2xl mx-auto"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+        </Typography>
+        <Typography 
+          variant="h6" 
+          align="center" 
+          color="text.secondary" 
+          sx={{ mb: 6 }}
         >
           Discover our collection of carefully crafted recipes, from classic French pastries to modern desserts.
-        </motion.p>
-      </div>
+        </Typography>
 
-      {/* Search and Filters */}
-      <div className="mb-8 space-y-4">
-        {/* Search */}
-        <div className="max-w-md mx-auto">
-          <div className="relative">
-            <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search recipes..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-        </div>
+        {/* Search and Filters */}
+        <Box sx={{ mb: 6 }}>
+          <TextField
+            fullWidth
+            variant="outlined"
+            placeholder="Search recipes..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            sx={{ mb: 4 }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
 
-        {/* Filters */}
-        <div className="flex flex-wrap justify-center gap-4">
-          <div className="space-y-2">
-            <p className="text-sm font-medium text-gray-700">Category</p>
-            <div className="flex flex-wrap gap-2">
-              {categories.map((category) => (
-                <Button
-                  key={category}
-                  variant={selectedCategory === category ? 'primary' : 'outline'}
-                  size="sm"
-                  onClick={() => setSelectedCategory(category)}
-                >
-                  {category}
-                </Button>
-              ))}
-            </div>
-          </div>
-          <div className="space-y-2">
-            <p className="text-sm font-medium text-gray-700">Difficulty</p>
-            <div className="flex flex-wrap gap-2">
-              {difficulties.map((difficulty) => (
-                <Button
-                  key={difficulty}
-                  variant={selectedDifficulty === difficulty ? 'primary' : 'outline'}
-                  size="sm"
-                  onClick={() => setSelectedDifficulty(difficulty)}
-                >
-                  {difficulty}
-                </Button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={6}>
+              <Typography variant="subtitle1" gutterBottom>
+                Category
+              </Typography>
+              <ToggleButtonGroup
+                value={selectedCategory}
+                exclusive
+                onChange={handleCategoryChange}
+                aria-label="recipe category"
+                sx={{ flexWrap: 'wrap' }}
+              >
+                {categories.map((category) => (
+                  <ToggleButton 
+                    key={category} 
+                    value={category}
+                    sx={{ 
+                      m: 0.5,
+                      borderRadius: 2,
+                      '&.Mui-selected': {
+                        backgroundColor: 'primary.main',
+                        color: 'white',
+                        '&:hover': {
+                          backgroundColor: 'primary.dark',
+                        },
+                      },
+                    }}
+                  >
+                    {category}
+                  </ToggleButton>
+                ))}
+              </ToggleButtonGroup>
+            </Grid>
 
-      {/* Recipe Grid */}
-      <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <AnimatePresence>
+            <Grid item xs={12} md={6}>
+              <Typography variant="subtitle1" gutterBottom>
+                Difficulty
+              </Typography>
+              <ToggleButtonGroup
+                value={selectedDifficulty}
+                exclusive
+                onChange={handleDifficultyChange}
+                aria-label="recipe difficulty"
+              >
+                {difficulties.map((difficulty) => (
+                  <ToggleButton 
+                    key={difficulty} 
+                    value={difficulty}
+                    sx={{ 
+                      m: 0.5,
+                      borderRadius: 2,
+                      '&.Mui-selected': {
+                        backgroundColor: 'primary.main',
+                        color: 'white',
+                        '&:hover': {
+                          backgroundColor: 'primary.dark',
+                        },
+                      },
+                    }}
+                  >
+                    {difficulty}
+                  </ToggleButton>
+                ))}
+              </ToggleButtonGroup>
+            </Grid>
+          </Grid>
+        </Box>
+
+        {/* Recipe Grid */}
+        <Grid container spacing={4}>
           {filteredRecipes.map((recipe) => (
-            <RecipeCard key={recipe.id} recipe={recipe} />
+            <Grid item key={recipe.id} xs={12} sm={6} md={4}>
+              <RecipeCard recipe={recipe} />
+            </Grid>
           ))}
-        </AnimatePresence>
-      </motion.div>
+        </Grid>
 
-      {/* Empty State */}
-      {filteredRecipes.length === 0 && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-center py-12"
-        >
-          <p className="text-gray-500 text-lg">
-            No recipes found. Try adjusting your search or filters.
-          </p>
-        </motion.div>
-      )}
-    </div>
+        {/* Empty State */}
+        {filteredRecipes.length === 0 && (
+          <Box sx={{ textAlign: 'center', py: 8 }}>
+            <Typography variant="h6" color="text.secondary" gutterBottom>
+              No recipes found
+            </Typography>
+            <Typography color="text.secondary">
+              Try adjusting your search or filters
+            </Typography>
+          </Box>
+        )}
+      </Box>
+    </Container>
   );
 }

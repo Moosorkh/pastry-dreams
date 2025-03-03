@@ -1,16 +1,23 @@
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  Chip,
+  Box,
+  CardActionArea,
+} from '@mui/material';
+import { AccessTime as AccessTimeIcon } from '@mui/icons-material';
 
-export interface Recipe {
+interface Recipe {
   id: string;
   title: string;
   description: string;
-  prepTime: string;
-  cookTime: string;
   difficulty: 'Easy' | 'Medium' | 'Hard';
   category: string;
   image: string;
-  slug: string;
+  timeNeeded: string;
 }
 
 interface RecipeCardProps {
@@ -18,54 +25,89 @@ interface RecipeCardProps {
 }
 
 const difficultyColors = {
-  Easy: 'bg-green-100 text-green-800',
-  Medium: 'bg-yellow-100 text-yellow-800',
-  Hard: 'bg-red-100 text-red-800',
+  Easy: '#4caf50',
+  Medium: '#ff9800',
+  Hard: '#f44336',
 };
 
-const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
+export default function RecipeCard({ recipe }: RecipeCardProps) {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/recipes/${recipe.id}`);
+  };
+
   return (
-    <motion.div
-      layout
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+    <Card 
+      sx={{ 
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        transition: 'transform 0.2s ease-in-out',
+        '&:hover': {
+          transform: 'translateY(-4px)',
+        },
+      }}
     >
-      <Link to={`/recipes/${recipe.slug}`}>
-        <div className="relative h-48">
-          <img
-            src={recipe.image}
-            alt={recipe.title}
-            className="w-full h-full object-cover transform transition-transform duration-300 hover:scale-105"
-          />
-          <div className="absolute top-4 right-4">
-            <span className={`px-2 py-1 rounded-full text-xs font-medium ${difficultyColors[recipe.difficulty]}`}>
-              {recipe.difficulty}
-            </span>
-          </div>
-        </div>
-        <div className="p-6">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-primary-600 font-medium">
-              {recipe.category}
-            </span>
-            <div className="flex items-center space-x-2 text-sm text-gray-500">
-              <span>{recipe.prepTime} prep</span>
-              <span>•</span>
-              <span>{recipe.cookTime} cook</span>
-            </div>
-          </div>
-          <h3 className="text-xl font-serif font-semibold text-gray-900 mb-2">
+      <CardActionArea onClick={handleClick}>
+        <CardMedia
+          component="img"
+          height="200"
+          image={recipe.image}
+          alt={recipe.title}
+        />
+        <CardContent sx={{ flexGrow: 1 }}>
+          <Box sx={{ mb: 2 }}>
+            <Chip
+              label={recipe.difficulty}
+              size="small"
+              sx={{
+                backgroundColor: difficultyColors[recipe.difficulty],
+                color: 'white',
+                mr: 1,
+              }}
+            />
+            <Chip
+              label={recipe.category}
+              size="small"
+              variant="outlined"
+            />
+          </Box>
+          
+          <Typography 
+            gutterBottom 
+            variant="h6" 
+            component="h2"
+            sx={{ 
+              fontFamily: 'Playfair Display',
+              minHeight: 64,
+            }}
+          >
             {recipe.title}
-          </h3>
-          <p className="text-gray-600 text-sm line-clamp-2">
+          </Typography>
+          
+          <Typography 
+            variant="body2" 
+            color="text.secondary"
+            sx={{ mb: 2 }}
+          >
             {recipe.description}
-          </p>
-        </div>
-      </Link>
-    </motion.div>
-  );
-};
+          </Typography>
 
-export default RecipeCard;
+          <Box 
+            sx={{ 
+              display: 'flex', 
+              alignItems: 'center',
+              color: 'text.secondary',
+            }}
+          >
+            <AccessTimeIcon sx={{ fontSize: 16, mr: 0.5 }} />
+            <Typography variant="caption">
+              {recipe.timeNeeded}
+            </Typography>
+          </Box>
+        </CardContent>
+      </CardActionArea>
+    </Card>
+  );
+}
