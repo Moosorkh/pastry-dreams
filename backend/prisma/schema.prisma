@@ -1,0 +1,99 @@
+// This is your Prisma schema file
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model
+model User {
+  id            String    @id @default(uuid())
+  name          String
+  email         String    @unique
+  password      String
+  role          Role      @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // Relationships
+  recipes       Recipe[]
+  galleryItems  GalleryItem[]
+}
+
+// Role enum
+enum Role {
+  USER
+  ADMIN
+}
+
+// Recipe model
+model Recipe {
+  id            String    @id @default(uuid())
+  title         String
+  slug          String    @unique
+  description   String
+  difficulty    Difficulty
+  category      String
+  prepTime      String
+  cookTime      String
+  servings      Int
+  ingredients   String[]
+  instructions  String[]
+  tips          String[]  @default([])
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // Relationships
+  author        User      @relation(fields: [authorId], references: [id])
+  authorId      String
+}
+
+// Difficulty enum for recipes
+enum Difficulty {
+  Easy
+  Medium
+  Hard
+}
+
+// Gallery model
+model GalleryItem {
+  id            String    @id @default(uuid())
+  title         String
+  category      String
+  image         String
+  featured      Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // Relationships
+  uploader      User      @relation(fields: [uploaderId], references: [id])
+  uploaderId    String
+}
+
+// Contact message model
+model ContactMessage {
+  id            String    @id @default(uuid())
+  name          String
+  email         String
+  phone         String?
+  subject       String
+  message       String
+  eventDate     DateTime?
+  eventType     String?
+  status        MessageStatus @default(NEW)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+// Message status enum
+enum MessageStatus {
+  NEW
+  READ
+  REPLIED
+  ARCHIVED
+}

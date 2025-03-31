@@ -96,12 +96,12 @@ import {
             <Grid item xs={12} md={6}>
               <Box
                 component="img"
-                src="/api/placeholder/600/800"
+                src="src\assets\mary-kitchen.jpg"
                 alt="Mary in her kitchen"
                 sx={{
                   width: '100%',
                   height: 'auto',
-                  borderRadius: 2,
+                  borderRadius: 100,
                   boxShadow: 3,
                 }}
               />
