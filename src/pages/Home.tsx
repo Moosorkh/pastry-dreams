@@ -10,6 +10,7 @@ import {
   Button,
   Paper,
 } from '@mui/material';
+import bannerImage from '../../public/banner-image.png'; 
 
 const featuredCreations = [
   {
@@ -49,7 +50,7 @@ export default function Home() {
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center',
-          backgroundImage: `url(/api/placeholder/1600/800)`,
+          backgroundImage: `url(${bannerImage})`,
           minHeight: '500px',
         }}
       >
