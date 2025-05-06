@@ -1,49 +1,50 @@
 import { ReactElement } from 'react';
 
 export interface Achievement {
-    year: string;
-    title: string;
-    description: string;
-    icon: ReactElement;
-  }
+  year: string;
+  title: string;
+  description: string;
+  icon: ReactElement;
+}
   
-  export interface Specialty {
-    title: string;
-    description: string;
-  }
+export interface Specialty {
+  title: string;
+  description: string;
+}
 
 // Recipe Types
 export interface Recipe {
-    id: string;
-    title: string;
-    description: string;
-    prepTime: string;
-    cookTime: string;
-    servings: number;
-    difficulty: 'Easy' | 'Medium' | 'Hard';
-    category: string;
-    image: string;
-    slug: string;
-    ingredients?: string[];
-    instructions?: string[];
-    tips?: string[];
-  }
+  id: string;
+  title: string;
+  description: string;
+  prepTime: string;
+  cookTime: string;
+  servings: number;
+  difficulty: 'Easy' | 'Medium' | 'Hard';
+  category: string;
+  image: string;
+  slug?: string;
+  ingredients?: string[];
+  instructions?: string[];
+  tips?: string[];
+  timeNeeded: string; // Make this required since RecipeCard depends on it
+}
   
-  // Gallery Types
-  export interface GalleryItem {
-    id: string;
-    src: string;
-    alt: string;
-    category: string;
-  }
+// Gallery Types
+export interface GalleryItem {
+  id: string;
+  src: string;
+  alt: string;
+  category: string;
+}
   
-  // Contact Form Types
-  export interface ContactFormData {
-    name: string;
-    email: string;
-    phone?: string;
-    subject: string;
-    message: string;
-    eventDate?: string;
-    eventType?: string;
-  }
+// Contact Form Types
+export interface ContactFormData {
+  name: string;
+  email: string;
+  phone?: string;
+  subject: string;
+  message: string;
+  eventDate?: string;
+  eventType?: string;
+}
