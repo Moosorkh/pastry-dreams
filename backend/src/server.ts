@@ -19,6 +19,12 @@ import contactRoutes from './routes/contactRoutes';
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+const allowedOrigins = process.env.FRONTEND_URL 
+  ? process.env.FRONTEND_URL.split(',') 
+  : ['http://localhost:5173', 'http://localhost:3000'];
+
+  console.log('CORS allowed origins:', allowedOrigins);
+
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -36,7 +42,7 @@ app.use(limiter);
 
 // CORS configuration
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:3000'],
+  origin: allowedOrigins,
   credentials: true
 }));
 
