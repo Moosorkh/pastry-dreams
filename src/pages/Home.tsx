@@ -11,30 +11,7 @@ import {
   Paper,
 } from '@mui/material';
 import bannerImage from '../../public/banner-image.png'; 
-
-const featuredCreations = [
-  {
-    id: 1,
-    title: 'French Macarons',
-    image: '/api/placeholder/400/300',
-    category: 'Pastries',
-    description: 'Delicate almond meringue cookies with smooth ganache filling',
-  },
-  {
-    id: 2,
-    title: 'Wedding Cake',
-    image: '/api/placeholder/400/300',
-    category: 'Cakes',
-    description: 'Elegant multi-tiered cakes for your special day',
-  },
-  {
-    id: 3,
-    title: 'Artisan Croissants',
-    image: '/api/placeholder/400/300',
-    category: 'Breads',
-    description: 'Flaky, buttery croissants made from scratch',
-  },
-];
+import { featuredCreations } from '../data/mockData';
 
 export default function Home() {
   return (

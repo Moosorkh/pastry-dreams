@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useParams, Link as RouterLink } from 'react-router-dom';
 import {
   Container,
   Typography,
@@ -26,46 +26,7 @@ import {
   Add as AddIcon,
   Remove as RemoveIcon,
 } from '@mui/icons-material';
-
-// This would typically come from an API
-const recipeData = {
-  id: '1',
-  title: 'Classic French Macarons',
-  description: 'Delicate almond meringue cookies with a smooth ganache filling. Perfect for special occasions or afternoon tea.',
-  difficulty: 'Hard' as const,
-  category: 'Cookies',
-  prepTime: '30 minutes',
-  cookTime: '20 minutes',
-  servings: 24,
-  rating: 4.8,
-  image: '/api/placeholder/800/400',
-  ingredients: [
-    '100g ground almonds',
-    '100g powdered sugar',
-    '2 large egg whites (aged overnight)',
-    '50g granulated sugar',
-    'Food coloring (optional)',
-    '150g heavy cream',
-    '150g chocolate (for filling)',
-  ],
-  instructions: [
-    'Sift ground almonds and powdered sugar together in a bowl.',
-    'Beat egg whites until foamy, then gradually add granulated sugar until stiff peaks form.',
-    'Fold dry ingredients into egg whites carefully until mixture is smooth and flowing.',
-    'Pipe small circles onto parchment-lined baking sheets.',
-    'Let rest for 30 minutes until a skin forms on top.',
-    'Bake at 150°C (300°F) for 15-20 minutes.',
-    'Let cool completely before filling.',
-    'For the ganache filling, heat cream and pour over chopped chocolate. Stir until smooth.',
-    'Once cooled, pipe filling between two macaron shells.',
-  ],
-  tips: [
-    'Make sure all ingredients are at room temperature',
-    'Age your egg whites for 24-48 hours for best results',
-    'Tap the baking sheet on the counter to remove air bubbles',
-    'Use a template under parchment paper for consistent sizes',
-  ],
-};
+import { recipes } from '../data/mockData';
 
 const difficultyColors = {
   Easy: 'success',
@@ -74,19 +35,46 @@ const difficultyColors = {
 } as const;
 
 export default function RecipeDetail() {
- // const { id } = useParams<{ id: string }>();
-  const [servings, setServings] = useState(recipeData.servings);
+  const { slug } = useParams<{ slug: string }>();
+  const [recipe, setRecipe] = useState(recipes[0]); // Default to first recipe
+  const [servings, setServings] = useState(recipe.servings);
+  const [loading, setLoading] = useState(true);
+
+  // Find the recipe by slug when the component mounts or slug changes
+  useEffect(() => {
+    setLoading(true);
+    // Simulate API delay for demo purposes
+    setTimeout(() => {
+      const foundRecipe = recipes.find(r => r.slug === slug);
+      if (foundRecipe) {
+        setRecipe(foundRecipe);
+        setServings(foundRecipe.servings);
+      }
+      setLoading(false);
+    }, 300);
+  }, [slug]);
 
   // Function to adjust ingredient quantities based on serving size
   const adjustQuantity = (ingredient: string) => {
     const match = ingredient.match(/^(\d+(?:\.\d+)?)([a-zA-Z]+)\s(.+)/);
     if (match) {
       const [_, amount, unit, item] = match;
-      const adjustedAmount = (parseFloat(amount) * servings / recipeData.servings).toFixed(0);
+      const adjustedAmount = (parseFloat(amount) * servings / recipe.servings).toFixed(0);
       return `${adjustedAmount}${unit} ${item}`;
     }
     return ingredient;
   };
+
+  if (loading) {
+    return (
+      <Container maxWidth="lg">
+        <Box sx={{ py: 8, display: 'flex', justifyContent: 'center' }}>
+          {/* You can add a loading spinner here if you want */}
+          <Typography>Loading recipe...</Typography>
+        </Box>
+      </Container>
+    );
+  }
 
   return (
     <Container maxWidth="lg">
@@ -97,37 +85,37 @@ export default function RecipeDetail() {
             <ArrowBackIcon sx={{ mr: 0.5 }} fontSize="small" />
             Recipes
           </Link>
-          <Typography color="text.primary">{recipeData.title}</Typography>
+          <Typography color="text.primary">{recipe.title}</Typography>
         </Breadcrumbs>
 
         {/* Recipe Header */}
         <Box sx={{ mb: 6 }}>
           <Typography variant="h2" component="h1" sx={{ fontFamily: 'Playfair Display', mb: 2 }}>
-            {recipeData.title}
+            {recipe.title}
           </Typography>
           
           <Box sx={{ mb: 3 }}>
-            <Rating value={recipeData.rating} precision={0.1} readOnly sx={{ mb: 1 }} />
+            <Rating value={recipe.rating} precision={0.1} readOnly sx={{ mb: 1 }} />
             <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
               <Chip
-                label={recipeData.difficulty}
-                color={difficultyColors[recipeData.difficulty]}
+                label={recipe.difficulty}
+                color={difficultyColors[recipe.difficulty as keyof typeof difficultyColors]}
                 size="small"
               />
               <Chip
-                label={recipeData.category}
+                label={recipe.category}
                 variant="outlined"
                 size="small"
               />
               <Chip
                 icon={<AccessTimeIcon />}
-                label={`Prep: ${recipeData.prepTime}`}
+                label={`Prep: ${recipe.prepTime}`}
                 variant="outlined"
                 size="small"
               />
               <Chip
                 icon={<DiningIcon />}
-                label={`Cook: ${recipeData.cookTime}`}
+                label={`Cook: ${recipe.cookTime}`}
                 variant="outlined"
                 size="small"
               />
@@ -135,7 +123,7 @@ export default function RecipeDetail() {
           </Box>
 
           <Typography variant="subtitle1" color="text.secondary" paragraph>
-            {recipeData.description}
+            {recipe.description}
           </Typography>
         </Box>
 
@@ -149,9 +137,13 @@ export default function RecipeDetail() {
           }}
         >
           <img
-            src={recipeData.image}
-            alt={recipeData.title}
+            src={recipe.image}
+            alt={recipe.title}
             style={{ width: '100%', height: 'auto', display: 'block' }}
+            onError={(e) => {
+              // Fallback for if the image fails to load
+              (e.target as HTMLImageElement).src = 'https://placehold.co/800x400?text=Recipe+Image';
+            }}
           />
         </Paper>
 
@@ -189,7 +181,7 @@ export default function RecipeDetail() {
               <Divider sx={{ my: 2 }} />
 
               <List>
-                {recipeData.ingredients.map((ingredient, index) => (
+                {recipe.ingredients.map((ingredient, index) => (
                   <ListItem key={index} sx={{ px: 0 }}>
                     <ListItemIcon sx={{ minWidth: 32 }}>
                       <RestaurantIcon color="primary" fontSize="small" />
@@ -208,7 +200,7 @@ export default function RecipeDetail() {
                 Instructions
               </Typography>
               <List>
-                {recipeData.instructions.map((instruction, index) => (
+                {recipe.instructions.map((instruction, index) => (
                   <ListItem key={index} sx={{ px: 0 }}>
                     <ListItemIcon>
                       <Typography variant="h6" color="primary">
@@ -221,28 +213,30 @@ export default function RecipeDetail() {
               </List>
             </Paper>
 
-            <Paper sx={{ p: 3, bgcolor: 'primary.light' }}>
-              <Typography variant="h5" gutterBottom sx={{ fontFamily: 'Playfair Display', color: 'primary.contrastText' }}>
-                Pro Tips
-              </Typography>
-              <List>
-                {recipeData.tips.map((tip, index) => (
-                  <ListItem key={index} sx={{ px: 0 }}>
-                    <ListItemIcon sx={{ color: 'primary.contrastText' }}>
-                      <Typography variant="body1">•</Typography>
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary={tip} 
-                      sx={{ 
-                        '& .MuiListItemText-primary': { 
-                          color: 'primary.contrastText' 
-                        } 
-                      }} 
-                    />
-                  </ListItem>
-                ))}
-              </List>
-            </Paper>
+            {recipe.tips && recipe.tips.length > 0 && (
+              <Paper sx={{ p: 3, bgcolor: 'primary.light' }}>
+                <Typography variant="h5" gutterBottom sx={{ fontFamily: 'Playfair Display', color: 'primary.contrastText' }}>
+                  Pro Tips
+                </Typography>
+                <List>
+                  {recipe.tips.map((tip, index) => (
+                    <ListItem key={index} sx={{ px: 0 }}>
+                      <ListItemIcon sx={{ color: 'primary.contrastText' }}>
+                        <Typography variant="body1">•</Typography>
+                      </ListItemIcon>
+                      <ListItemText 
+                        primary={tip} 
+                        sx={{ 
+                          '& .MuiListItemText-primary': { 
+                            color: 'primary.contrastText' 
+                          } 
+                        }} 
+                      />
+                    </ListItem>
+                  ))}
+                </List>
+              </Paper>
+            )}
           </Grid>
         </Grid>
       </Box>

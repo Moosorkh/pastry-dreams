@@ -16,18 +16,19 @@ export interface Specialty {
 export interface Recipe {
   id: string;
   title: string;
+  slug: string;
   description: string;
+  difficulty: 'Easy' | 'Medium' | 'Hard';
+  category: string;
   prepTime: string;
   cookTime: string;
   servings: number;
-  difficulty: 'Easy' | 'Medium' | 'Hard';
-  category: string;
+  rating?: number;
   image: string;
-  slug?: string;
-  ingredients?: string[];
-  instructions?: string[];
-  tips?: string[];
-  timeNeeded: string; // Make this required since RecipeCard depends on it
+  timeNeeded: string;
+  ingredients: string[];
+  instructions: string[];
+  tips: string[];
 }
   
 // Gallery Types

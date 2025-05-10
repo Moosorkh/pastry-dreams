@@ -5,54 +5,11 @@ import {
 } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
 import RecipeCard from '../components/features/recipes/RecipeCard';
-import { recipeService } from '../services/api';
+import { recipes as mockRecipes } from '../data/mockData';
 import { Recipe } from '../types';
 
 const categories = ['All', 'Cakes', 'Cookies', 'Breads', 'Desserts', 'Pastries'];
 const difficulties = ['All', 'Easy', 'Medium', 'Hard'] as const;
-
-// Fallback data in case API fails
-const fallbackRecipes: Recipe[] = [
-  {
-    id: '1',
-    title: 'Classic French Macarons',
-    description: 'Delicate almond meringue cookies with a smooth ganache filling. Perfect for special occasions or afternoon tea.',
-    prepTime: '30m',
-    cookTime: '20m',
-    difficulty: 'Hard',
-    category: 'Cookies',
-    image: '/api/placeholder/400/300',
-    timeNeeded: '30m prep•20m cook',
-    servings: 12,
-    slug: 'classic-french-macarons'
-  },
-  {
-    id: '2',
-    title: 'Chocolate Soufflé',
-    description: 'Light and airy chocolate soufflé that rises to perfection. A classic French dessert that never fails to impress.',
-    prepTime: '20m',
-    cookTime: '15m',
-    difficulty: 'Medium',
-    category: 'Desserts',
-    image: '/api/placeholder/400/300',
-    timeNeeded: '20m prep•15m cook',
-    servings: 4,
-    slug: 'chocolate-souffle'
-  },
-  {
-    id: '3',
-    title: 'Artisan Croissants',
-    description: 'Flaky, buttery croissants made from scratch. The ultimate French breakfast pastry.',
-    prepTime: '45m',
-    cookTime: '25m',
-    difficulty: 'Hard',
-    category: 'Breads',
-    image: '/api/placeholder/400/300',
-    timeNeeded: '45m prep•25m cook',
-    servings: 8,
-    slug: 'artisan-croissants'
-  },
-];
 
 export default function Recipes() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -60,82 +17,27 @@ export default function Recipes() {
   const [selectedDifficulty, setSelectedDifficulty] = useState('All');
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [usingFallbackData, setUsingFallbackData] = useState(false);
 
-  // Fetch recipes from API or use fallback data
+  // Load mock recipes instead of fetching from API
   useEffect(() => {
-    const fetchRecipes = async () => {
-      setLoading(true);
-      setError(null);
-      
-      try {
-        // Prepare query parameters
-        const params: any = {};
-        if (selectedCategory !== 'All') params.category = selectedCategory;
-        if (selectedDifficulty !== 'All') params.difficulty = selectedDifficulty;
-        
-        // Fetch recipes from API
-        const response = await recipeService.getRecipes(params);
-        
-        // Process API data to ensure timeNeeded is available
-        const processedRecipes = response.data.data.map((recipe: any) => ({
-          ...recipe,
-          timeNeeded: recipe.timeNeeded || `${recipe.prepTime} prep•${recipe.cookTime} cook`
-        })) as Recipe[];
-        
-        setRecipes(processedRecipes);
-        setUsingFallbackData(false);
-      } catch (err: any) {
-        console.error('Failed to fetch recipes:', err);
-        setError('Failed to load recipes from server. Showing sample data instead.');
-        setRecipes(fallbackRecipes);
-        setUsingFallbackData(true);
-      } finally {
-        setLoading(false);
-      }
-    };
+    setLoading(true);
+    
+    // Simulate API delay for demo purposes
+    setTimeout(() => {
+      setRecipes(mockRecipes);
+      setLoading(false);
+    }, 500);
+  }, []);
 
-    fetchRecipes();
+  // Filter recipes locally based on selected category and difficulty
+  useEffect(() => {
+    // No need to reload data, just let the filtering happen in the render
   }, [selectedCategory, selectedDifficulty]);
 
   // Function to handle search
   const handleSearch = () => {
-    // If using fallback data, filter locally
-    if (usingFallbackData) {
-      // No action needed as we're filtering in the render method
-    } else {
-      // Fetch from API with search parameter
-      const fetchWithSearch = async () => {
-        setLoading(true);
-        setError(null);
-        
-        try {
-          const params: any = {};
-          if (selectedCategory !== 'All') params.category = selectedCategory;
-          if (selectedDifficulty !== 'All') params.difficulty = selectedDifficulty;
-          if (searchQuery) params.search = searchQuery;
-          
-          const response = await recipeService.getRecipes(params);
-          
-          // Process API data to ensure timeNeeded is available
-          const processedRecipes = response.data.data.map((recipe: any) => ({
-            ...recipe,
-            timeNeeded: recipe.timeNeeded || `${recipe.prepTime} prep•${recipe.cookTime} cook`
-          })) as Recipe[];
-          
-          setRecipes(processedRecipes);
-        } catch (err: any) {
-          console.error('Failed to search recipes:', err);
-          setError('Failed to search recipes. Please try again.');
-          // Keep using current recipes
-        } finally {
-          setLoading(false);
-        }
-      };
-      
-      fetchWithSearch();
-    }
+    // Just trigger re-render with current filters
+    // The actual filtering is done in the filteredRecipes calculation
   };
 
   const handleCategoryChange = (
@@ -156,18 +58,16 @@ export default function Recipes() {
     }
   };
 
-  // Filter recipes locally if using fallback data
-  const filteredRecipes = usingFallbackData
-    ? recipes.filter(recipe => {
-        const matchesSearch = searchQuery === '' || 
-          recipe.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          recipe.description.toLowerCase().includes(searchQuery.toLowerCase());
-        const matchesCategory = selectedCategory === 'All' || recipe.category === selectedCategory;
-        const matchesDifficulty = selectedDifficulty === 'All' || recipe.difficulty === selectedDifficulty;
-        
-        return matchesSearch && matchesCategory && matchesDifficulty;
-      })
-    : recipes;
+  // Filter recipes locally
+  const filteredRecipes = recipes.filter(recipe => {
+    const matchesSearch = searchQuery === '' || 
+      recipe.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      recipe.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory === 'All' || recipe.category === selectedCategory;
+    const matchesDifficulty = selectedDifficulty === 'All' || recipe.difficulty === selectedDifficulty;
+    
+    return matchesSearch && matchesCategory && matchesDifficulty;
+  });
 
   return (
     <Container maxWidth="xl">
@@ -283,13 +183,6 @@ export default function Recipes() {
             </Grid>
           </Grid>
         </Box>
-
-        {/* Error Message with Fallback Notice */}
-        {error && (
-          <Alert severity="warning" sx={{ mb: 4 }}>
-            {error}
-          </Alert>
-        )}
 
         {/* Loading State */}
         {loading ? (

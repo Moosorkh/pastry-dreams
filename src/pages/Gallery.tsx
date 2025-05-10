@@ -11,41 +11,7 @@ import {
   useTheme,
 } from '@mui/material';
 
-const galleryItems = [
-  {
-    img: '/api/placeholder/600/800',
-    title: 'Wedding Cake with Roses',
-    category: 'Cakes',
-    featured: true,
-  },
-  {
-    img: '/api/placeholder/600/600',
-    title: 'French Macarons',
-    category: 'Pastries',
-  },
-  {
-    img: '/api/placeholder/600/800',
-    title: 'Birthday Cake',
-    category: 'Cakes',
-  },
-  {
-    img: '/api/placeholder/600/600',
-    title: 'Artisan Croissants',
-    category: 'Breads',
-  },
-  {
-    img: '/api/placeholder/800/600',
-    title: 'Custom Wedding Cake',
-    category: 'Custom Orders',
-    featured: true,
-  },
-  {
-    img: '/api/placeholder/600/600',
-    title: 'Chocolate Eclairs',
-    category: 'Pastries',
-  },
-  // Add more items as needed
-];
+import { galleryItems } from '../data/mockData'; 
 
 const categories = ['All', 'Cakes', 'Pastries', 'Breads', 'Custom Orders'];
 
