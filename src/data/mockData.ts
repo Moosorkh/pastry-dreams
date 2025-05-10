@@ -1,4 +1,4 @@
-import { Recipe, GalleryItem } from '../types/index';
+import { Recipe } from '../types/index';
 import IMG_3104 from '../../public/IMG_3104.jpg';
 
 

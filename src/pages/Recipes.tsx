@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {
   Container, Typography, Box, Grid, TextField, ToggleButton,
-  ToggleButtonGroup, InputAdornment, CircularProgress, Alert, Button
+  ToggleButtonGroup, InputAdornment, CircularProgress, Button
 } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
 import RecipeCard from '../components/features/recipes/RecipeCard';
