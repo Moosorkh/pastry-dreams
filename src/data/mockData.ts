@@ -1,5 +1,8 @@
 import { Recipe } from '../types/index';
-import IMG_3104 from '../../public/IMG_3104.jpg';
+import IMG_3104 from '../../public/IMG_9384.jpg';
+import frenchMacarons from '../../public/french-macarons.jpg';
+import weddingCake from '../../public/wedding-cake1.jpg';
+import assortedPastries from '../../public/assorted-pastries.jpg';
 
 
 // Recipe data for RecipeDetail and Recipes components
@@ -210,7 +213,7 @@ export const recipes: Recipe[] = [
       featured: true,
     },
     {
-      img: '/api/placeholder/600/600',
+      img: frenchMacarons,
       title: 'French Macarons',
       category: 'Pastries',
     },
@@ -253,21 +256,21 @@ export const recipes: Recipe[] = [
     {
       id: 1,
       title: 'French Macarons',
-      image: '/api/placeholder/400/300',
+      image: frenchMacarons,
       category: 'Pastries',
       description: 'Delicate almond meringue cookies with smooth ganache filling',
     },
     {
       id: 2,
       title: 'Wedding Cake',
-      image: '/api/placeholder/400/300',
+      image: weddingCake,
       category: 'Cakes',
       description: 'Elegant multi-tiered cakes for your special day',
     },
     {
       id: 3,
-      title: 'Artisan Croissants',
-      image: '/api/placeholder/400/300',
+      title: 'Assorted Pastries',
+      image: assortedPastries,
       category: 'Breads',
       description: 'Flaky, buttery croissants made from scratch',
     },
