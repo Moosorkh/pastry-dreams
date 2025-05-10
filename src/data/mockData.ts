@@ -1,5 +1,5 @@
 import { Recipe, GalleryItem } from '../types/index';
-import IMG_3104 from '../../public/workSampleImages/IMG_3104.jpg';
+import IMG_3104 from '../../public/IMG_3104.jpg';
 
 
 // Recipe data for RecipeDetail and Recipes components
