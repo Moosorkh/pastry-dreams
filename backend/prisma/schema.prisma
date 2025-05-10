@@ -49,8 +49,8 @@ model Recipe {
   updatedAt     DateTime  @updatedAt
   
   // Relationships
-  author        User      @relation(fields: [authorId], references: [id])
-  authorId      String
+  author        User?      @relation(fields: [authorId], references: [id])
+  authorId      String?
 }
 
 // Difficulty enum for recipes
