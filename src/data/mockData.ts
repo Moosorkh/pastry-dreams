@@ -11,6 +11,10 @@ import lemonTart from '../../public/lemonTart.jpg';
 import burgerBuns from '../../public/BurgerBuns.jpg';
 import heartShapedMacarons from '../../public/heartShapedMacarons.jpg';
 import coolaBdCake from '../../public/coolaBdCake.jpg';
+import classicFrenchMacarons from '../../public/classicFrenchMacarons.jpg';
+import chocolateSouffle from '../../public/chocolateSouffle.jpg';
+import artisanChroissants from '../../public/artisanCriossants.jpg';
+import operaCake from '../../public/operaCake.jpg';
 
 
 
@@ -53,7 +57,7 @@ export const recipes: Recipe[] = [
         'Tap the baking sheet on the counter to remove air bubbles',
         'Use a template under parchment paper for consistent sizes'
       ],
-      image: '/api/placeholder/800/400',
+      image: classicFrenchMacarons,
       timeNeeded: '30m prep•20m cook'
     },
     {
@@ -91,7 +95,7 @@ export const recipes: Recipe[] = [
         'Don\'t open the oven while soufflés are baking',
         'Serve immediately for the best rise'
       ],
-      image: '/api/placeholder/800/400',
+      image: chocolateSouffle,
       timeNeeded: '20m prep•15m cook'
     },
     {
@@ -132,7 +136,7 @@ export const recipes: Recipe[] = [
         'If the butter starts to melt during rolling, return it to the refrigerator immediately',
         'For the best rise, proof the croissants in a slightly warm, humid environment'
       ],
-      image: '/api/placeholder/800/400',
+      image: artisanChroissants,
       timeNeeded: '45m prep•25m cook'
     },
     {
@@ -171,7 +175,7 @@ export const recipes: Recipe[] = [
         'Keep the cake refrigerated but bring to room temperature before serving',
         'Use a sharp knife dipped in hot water to get clean cuts'
       ],
-      image: '/api/placeholder/800/400',
+      image: operaCake,
       timeNeeded: '60m prep•30m cook'
     },
     {
@@ -208,7 +212,7 @@ export const recipes: Recipe[] = [
         'If the pastry starts to soften while you\'re working with it, return it to the refrigerator to chill',
         'The filling should be just set but still have a slight wobble when it comes out of the oven - it will continue to set as it cools'
       ],
-      image: '/api/placeholder/800/400',
+      image: lemonTart,
       timeNeeded: '40m prep•45m cook'
     }
   ];
