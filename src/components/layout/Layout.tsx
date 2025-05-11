@@ -15,6 +15,7 @@ import {
   ListItemText,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import EmailIcon from '@mui/icons-material/Email';
 
 const pages = [
   { name: 'Home', path: '/' },
@@ -28,7 +29,7 @@ export default function Layout() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -38,7 +39,7 @@ export default function Layout() {
     if (mobileOpen) {
       setMobileOpen(false);
     }
-    
+
     // Handle the About navigation
     if (path === '/about') {
       if (location.pathname === '/') {
@@ -61,7 +62,7 @@ export default function Layout() {
       setTimeout(() => {
         const aboutSection = document.getElementById('about');
         aboutSection?.scrollIntoView({ behavior: 'smooth' });
-        
+
         // Clean up state to prevent scrolling on subsequent renders
         window.history.replaceState({}, document.title);
       }, 100);
@@ -209,6 +210,13 @@ export default function Layout() {
         <Container maxWidth="sm">
           <Typography variant="body2" color="text.secondary" align="center">
             © {new Date().getFullYear()} Sweet Creations. All rights reserved.
+            <Box sx={{ display: 'flex', align: 'center', justifyContent: 'center', mt: 1 }}>
+              <EmailIcon color="primary" />
+              <Typography>Mkarimzade24@Gmail.com</Typography>
+            </Box>
+            <Typography sx={{ display: 'flex', align: 'center', justifyContent: 'center', mt: 1 }}>
+              Created with ❤️ by Mary Karimzadeh
+            </Typography>
           </Typography>
         </Container>
       </Box>
