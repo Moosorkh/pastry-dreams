@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import EmailIcon from '@mui/icons-material/Email';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
 
 const pages = [
   { name: 'Home', path: '/' },
@@ -214,9 +215,10 @@ export default function Layout() {
               <EmailIcon color="primary" />
               <Typography>Mkarimzade24@Gmail.com</Typography>
             </Box>
-            <Typography sx={{ display: 'flex', align: 'center', justifyContent: 'center', mt: 1 }}>
-              Created with ❤️ by Mary Karimzadeh
-            </Typography>
+            <Box sx={{ display: 'flex', align: 'center', justifyContent: 'center', mt: 1 }}>
+              <LinkedInIcon color="primary" />
+              <Typography><a href='https://www.linkedin.com/in/maryam-karimzadeh-467600206/'>LinkedIn</a></Typography>
+            </Box>
           </Typography>
         </Container>
       </Box>
