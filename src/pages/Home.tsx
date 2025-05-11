@@ -11,7 +11,6 @@ import {
   Button,
   Paper,
   Avatar,
-  Divider,
 } from '@mui/material';
 import Timeline from '@mui/lab/Timeline';
 import TimelineItem from '@mui/lab/TimelineItem';
