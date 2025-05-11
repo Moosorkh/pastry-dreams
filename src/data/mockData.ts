@@ -1,5 +1,5 @@
 import { Recipe } from '../types/index';
-import IMG_3104 from '../../public/IMG_9384.jpg';
+import strawbwerryCake from '../../public/strawberryCake.jpg';
 import frenchMacarons from '../../public/french-macarons.jpg';
 import weddingCake from '../../public/wedding-cake1.jpg';
 import assortedPastries from '../../public/assorted-pastries.jpg';
@@ -207,7 +207,7 @@ export const recipes: Recipe[] = [
   // Gallery items for Gallery component
   export const galleryItems = [
     {
-      img: IMG_3104,
+      img: strawbwerryCake,
       title: 'Strawberry Cake',
       category: 'Cakes',
       featured: true,
