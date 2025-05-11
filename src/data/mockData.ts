@@ -9,6 +9,7 @@ import cremeFilledCroissants from '../../public/cremeFilledCroissant.jpg';
 import cupCakeTray from '../../public/cupCakeTray.jpg';
 import easterCookies from '../../public/easterCookies.jpg';
 import lemonTart from '../../public/lemonTart.jpg';
+import burgerBuns from '../../public/burgerBuns.jpg';
 
 
 
@@ -257,9 +258,9 @@ export const recipes: Recipe[] = [
       category: 'Pastries',
     },
     {
-      img: lemonTart,
-      title: 'Lemon Tart',
-      category: 'Pastries',
+      img: burgerBuns,
+      title: 'Burger Buns',
+      category: 'Breads',
     }
   ];
   
