@@ -15,8 +15,7 @@ import {
   ListItemText,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import EmailIcon from '@mui/icons-material/Email';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import Footer from './Footer'; // Import the Footer component
 
 const pages = [
   { name: 'Home', path: '/' },
@@ -72,7 +71,7 @@ export default function Layout() {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center', width: 250 }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
+      <Typography variant="h6" sx={{ my: 2, fontFamily: 'Playfair Display' }}>
         Sweet Creations
       </Typography>
       <List>
@@ -109,7 +108,7 @@ export default function Layout() {
               sx={{
                 mr: 2,
                 display: { xs: 'none', md: 'flex' },
-                fontFamily: 'serif',
+                fontFamily: 'Playfair Display',
                 fontWeight: 700,
                 color: 'inherit',
                 textDecoration: 'none',
@@ -138,7 +137,7 @@ export default function Layout() {
                 mr: 2,
                 display: { xs: 'flex', md: 'none' },
                 flexGrow: 1,
-                fontFamily: 'serif',
+                fontFamily: 'Playfair Display',
                 fontWeight: 700,
                 color: 'inherit',
                 textDecoration: 'none',
@@ -196,32 +195,8 @@ export default function Layout() {
         </Container>
       </Box>
 
-      <Box
-        component="footer"
-        sx={{
-          py: 3,
-          px: 2,
-          mt: 'auto',
-          backgroundColor: (theme) =>
-            theme.palette.mode === 'light'
-              ? theme.palette.grey[200]
-              : theme.palette.grey[800],
-        }}
-      >
-        <Container maxWidth="sm">
-          <Typography sx={{ display: 'flex', alignItems: 'center', gap: 1, align: 'center' }} variant="body1">
-            © {new Date().getFullYear()} Sweet Creations. All rights reserved.
-          </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <EmailIcon color="primary" />
-              <Typography>Mkarimzade24@Gmail.com</Typography>
-            </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <LinkedInIcon color="primary" />
-              <Typography><a href='https://www.linkedin.com/in/maryam-karimzadeh-467600206/'>LinkedIn</a></Typography>
-            </Box>
-        </Container>
-      </Box>
+      {/* Use the Footer component instead of inline footer */}
+      <Footer />
     </Box>
   );
 }
