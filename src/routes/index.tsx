@@ -2,7 +2,6 @@ import React from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
 import Home from '../pages/Home';
-import About from '../pages/About';
 import Gallery from '../pages/Gallery';
 import Recipes from '../pages/Recipes';
 import RecipeDetail from '../pages/RecipeDetail';
@@ -47,7 +46,8 @@ const AppRoutes: React.FC = () => {
       <Route element={<Layout />}>
         {/* Public Routes */}
         <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
+        {/* Redirect About to Home with reference to about section */}
+        <Route path="/about" element={<Home />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/recipes" element={<Recipes />} />
         <Route path="/recipes/:id" element={<RecipeDetail />} />

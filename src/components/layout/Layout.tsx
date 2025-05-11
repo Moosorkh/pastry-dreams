@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link as RouterLink, Outlet, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link as RouterLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {
   AppBar,
   Box,
@@ -18,7 +18,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 const pages = [
   { name: 'Home', path: '/' },
-  { name: 'About', path: '/about' },
+  // { name: 'About', path: '/about' },
   { name: 'Gallery', path: '/gallery' },
   { name: 'Recipes', path: '/recipes' },
   { name: 'Contact', path: '/contact' },
@@ -27,9 +27,46 @@ const pages = [
 export default function Layout() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  const handleNavigation = (path: string) => {
+    // Close mobile drawer if open
+    if (mobileOpen) {
+      setMobileOpen(false);
+    }
+    
+    // Handle the About navigation
+    if (path === '/about') {
+      if (location.pathname === '/') {
+        // If we're on the home page, scroll to the about section
+        const aboutSection = document.getElementById('about');
+        aboutSection?.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        // If we're on another page, navigate to home first
+        navigate('/', { state: { scrollToAbout: true } });
+      }
+    } else {
+      // Regular navigation for other links
+      navigate(path);
+    }
+  };
+
+  // Check if we need to scroll to About section after navigation
+  useEffect(() => {
+    if (location.state && location.state.scrollToAbout) {
+      setTimeout(() => {
+        const aboutSection = document.getElementById('about');
+        aboutSection?.scrollIntoView({ behavior: 'smooth' });
+        
+        // Clean up state to prevent scrolling on subsequent renders
+        window.history.replaceState({}, document.title);
+      }, 100);
+    }
+  }, [location]);
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center', width: 250 }}>
@@ -40,8 +77,7 @@ export default function Layout() {
         {pages.map((item) => (
           <ListItem key={item.name} disablePadding>
             <ListItemButton
-              component={RouterLink}
-              to={item.path}
+              onClick={() => handleNavigation(item.path)}
               selected={location.pathname === item.path}
               sx={{
                 textAlign: 'center',
@@ -113,8 +149,7 @@ export default function Layout() {
               {pages.map((page) => (
                 <Button
                   key={page.name}
-                  component={RouterLink}
-                  to={page.path}
+                  onClick={() => handleNavigation(page.path)}
                   sx={{
                     my: 2,
                     mx: 1,
