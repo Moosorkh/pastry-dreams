@@ -123,16 +123,12 @@ export default function Contact() {
                 </Typography>
                 <Stack spacing={2}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <PhoneIcon color="primary" />
-                    <Typography>+1 (555) 123-4567</Typography>
-                  </Box>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <EmailIcon color="primary" />
-                    <Typography>hello@sweetcreations.com</Typography>
+                    <Typography>Mkarimzade24@Gmail.com</Typography>
                   </Box>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <LocationIcon color="primary" />
-                    <Typography>123 Bakery Street, Sweetville, CA 90210</Typography>
+                    <Typography>Irvine, CA</Typography>
                   </Box>
                 </Stack>
               </Paper>
