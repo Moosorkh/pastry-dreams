@@ -10,6 +10,7 @@ import cupCakeTray from '../../public/cupCakeTray.jpg';
 import easterCookies from '../../public/easterCookies.jpg';
 import lemonTart from '../../public/lemonTart.jpg';
 import burgerBuns from '../../public/burgerBuns.jpg';
+import heartShapedMacarons from '../../public/heartShapedMacarons.jpg';
 
 
 
@@ -269,7 +270,7 @@ export const recipes: Recipe[] = [
     {
       id: 1,
       title: 'French Macarons',
-      image: frenchMacarons,
+      image: heartShapedMacarons,
       category: 'Pastries',
       description: 'Delicate almond meringue cookies with smooth ganache filling',
     },

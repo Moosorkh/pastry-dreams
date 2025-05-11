@@ -199,7 +199,7 @@ export default function Home() {
               Mary Karimzadeh
             </Typography>
             <Typography variant="h5" color="text.secondary" paragraph>
-              Master Pastry Chef
+              Pastry Chef
             </Typography>
             <Typography paragraph>
               As a talented cake decorator with a passion for baking and pastry arts, I've dedicated 
