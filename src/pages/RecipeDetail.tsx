@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link as RouterLink } from 'react-router-dom';
+import { useParams, Link as RouterLink, useNavigate } from 'react-router-dom';
 import {
   Container,
   Typography,
@@ -17,6 +17,8 @@ import {
   Breadcrumbs,
   Link,
   Rating,
+  CircularProgress,
+  Alert,
 } from '@mui/material';
 import {
   AccessTime as AccessTimeIcon,
@@ -39,16 +41,23 @@ export default function RecipeDetail() {
   const [recipe, setRecipe] = useState(recipes[0]); // Default to first recipe
   const [servings, setServings] = useState(recipe.servings);
   const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
+  const navigate = useNavigate();
 
   // Find the recipe by slug when the component mounts or slug changes
   useEffect(() => {
     setLoading(true);
+    setNotFound(false);
+    
     // Simulate API delay for demo purposes
     setTimeout(() => {
       const foundRecipe = recipes.find(r => r.slug === slug);
       if (foundRecipe) {
         setRecipe(foundRecipe);
         setServings(foundRecipe.servings);
+      } else {
+        console.error(`Recipe with slug "${slug}" not found`);
+        setNotFound(true);
       }
       setLoading(false);
     }, 300);
@@ -69,8 +78,26 @@ export default function RecipeDetail() {
     return (
       <Container maxWidth="lg">
         <Box sx={{ py: 8, display: 'flex', justifyContent: 'center' }}>
-          {/* You can add a loading spinner here if you want */}
-          <Typography>Loading recipe...</Typography>
+          <CircularProgress />
+        </Box>
+      </Container>
+    );
+  }
+
+  if (notFound) {
+    return (
+      <Container maxWidth="lg">
+        <Box sx={{ py: 8 }}>
+          <Alert severity="error" sx={{ mb: 4 }}>
+            Recipe not found. The recipe you're looking for might have been removed or doesn't exist.
+          </Alert>
+          <Button
+            variant="contained"
+            startIcon={<ArrowBackIcon />}
+            onClick={() => navigate('/recipes')}
+          >
+            Back to Recipes
+          </Button>
         </Box>
       </Container>
     );
@@ -139,7 +166,7 @@ export default function RecipeDetail() {
           <img
             src={recipe.image}
             alt={recipe.title}
-            style={{ width: '100%', height: 'auto', display: 'block' }}
+            style={{ width: '100%', height: '400px', display: 'block', objectFit: 'cover' }}
             onError={(e) => {
               // Fallback for if the image fails to load
               (e.target as HTMLImageElement).src = 'https://placehold.co/800x400?text=Recipe+Image';

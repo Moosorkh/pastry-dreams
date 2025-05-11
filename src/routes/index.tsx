@@ -50,7 +50,8 @@ const AppRoutes: React.FC = () => {
         <Route path="/about" element={<Home />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/recipes" element={<Recipes />} />
-        <Route path="/recipes/:id" element={<RecipeDetail />} />
+        {/* <Route path="/recipes/:id" element={<RecipeDetail />} /> */}
+        <Route path="/recipes/:slug" element={<RecipeDetail />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

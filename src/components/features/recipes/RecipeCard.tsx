@@ -12,6 +12,7 @@ import { AccessTime as AccessTimeIcon } from '@mui/icons-material';
 
 interface Recipe {
   id: string;
+  slug: string; // Make sure the Recipe interface includes slug
   title: string;
   description: string;
   difficulty: 'Easy' | 'Medium' | 'Hard';
@@ -34,7 +35,8 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/recipes/${recipe.id}`);
+    // Navigate using slug instead of id for better SEO
+    navigate(`/recipes/${recipe.slug}`);
   };
 
   return (
