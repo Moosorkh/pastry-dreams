@@ -208,13 +208,13 @@ export const recipes: Recipe[] = [
   export const galleryItems = [
     {
       img: IMG_3104,
-      title: 'Wedding Cake with Roses',
+      title: 'Strawberry Cake',
       category: 'Cakes',
       featured: true,
     },
     {
       img: frenchMacarons,
-      title: 'French Macarons',
+      title: 'Heart Shaped French Macarons',
       category: 'Pastries',
     },
     {
