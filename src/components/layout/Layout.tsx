@@ -209,17 +209,17 @@ export default function Layout() {
         }}
       >
         <Container maxWidth="sm">
-          <Typography variant="body2" color="text.secondary" align="center">
+          <Typography sx={{ display: 'flex', alignItems: 'center', gap: 1, align: 'center' }} variant="body1">
             © {new Date().getFullYear()} Sweet Creations. All rights reserved.
-            <Box sx={{ display: 'flex', align: 'center', justifyContent: 'center', mt: 1 }}>
+          </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <EmailIcon color="primary" />
               <Typography>Mkarimzade24@Gmail.com</Typography>
             </Box>
-            <Box sx={{ display: 'flex', align: 'center', justifyContent: 'center', mt: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <LinkedInIcon color="primary" />
               <Typography><a href='https://www.linkedin.com/in/maryam-karimzadeh-467600206/'>LinkedIn</a></Typography>
             </Box>
-          </Typography>
         </Container>
       </Box>
     </Box>

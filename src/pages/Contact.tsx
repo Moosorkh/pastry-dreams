@@ -22,6 +22,7 @@ import {
   Email as EmailIcon,
   LocationOn as LocationIcon,
   AccessTime as TimeIcon,
+  LinkedIn as LinkedInIcon,
 } from '@mui/icons-material';
 
 const businessHours = [
@@ -67,7 +68,7 @@ export default function Contact() {
     event.preventDefault();
     // Here you would typically send the form data to your backend
     console.log('Form submitted:', formData);
-    
+
     setSnackbar({
       open: true,
       message: 'Thank you for your message. We will get back to you soon!',
@@ -93,22 +94,22 @@ export default function Contact() {
   return (
     <Container maxWidth="lg">
       <Box sx={{ py: 8 }}>
-        <Typography 
-          variant="h2" 
-          component="h1" 
-          align="center" 
+        <Typography
+          variant="h2"
+          component="h1"
+          align="center"
           gutterBottom
           sx={{ fontFamily: 'Playfair Display' }}
         >
           Get in Touch
         </Typography>
-        <Typography 
-          variant="h6" 
-          align="center" 
-          color="text.secondary" 
+        <Typography
+          variant="h6"
+          align="center"
+          color="text.secondary"
           sx={{ mb: 8 }}
         >
-          Whether you're planning a special event or just want to say hello, 
+          Whether you're planning a special event or just want to say hello,
           I'd love to hear from you.
         </Typography>
 
@@ -124,6 +125,10 @@ export default function Contact() {
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <EmailIcon color="primary" />
                     <Typography>Mkarimzade24@Gmail.com</Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <LinkedInIcon color="primary" />
+                    <Typography><a href='https://www.linkedin.com/in/maryam-karimzadeh-467600206/'>LinkedIn</a></Typography>
                   </Box>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <LocationIcon color="primary" />
@@ -207,15 +212,15 @@ export default function Contact() {
                         value={formData.inquiryType}
                         onChange={handleChange}
                       >
-                        <FormControlLabel 
-                          value="general" 
-                          control={<Radio />} 
-                          label="General Inquiry" 
+                        <FormControlLabel
+                          value="general"
+                          control={<Radio />}
+                          label="General Inquiry"
                         />
-                        <FormControlLabel 
-                          value="event" 
-                          control={<Radio />} 
-                          label="Event Order" 
+                        <FormControlLabel
+                          value="event"
+                          control={<Radio />}
+                          label="Event Order"
                         />
                       </RadioGroup>
                     </FormControl>
@@ -270,7 +275,7 @@ export default function Contact() {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <Button 
+                    <Button
                       type="submit"
                       variant="contained"
                       size="large"
@@ -287,14 +292,14 @@ export default function Contact() {
         </Grid>
       </Box>
 
-      <Snackbar 
-        open={snackbar.open} 
-        autoHideDuration={6000} 
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
-        <Alert 
-          onClose={handleCloseSnackbar} 
+        <Alert
+          onClose={handleCloseSnackbar}
           severity={snackbar.severity}
           sx={{ width: '100%' }}
         >
