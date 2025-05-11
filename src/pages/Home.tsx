@@ -21,7 +21,6 @@ import TimelineDot from '@mui/lab/TimelineDot';
 import {
   School as SchoolIcon,
   Restaurant as RestaurantIcon,
-  EmojiEvents as AwardIcon,
   StarBorder as StarIcon,
   KeyboardArrowDown as KeyboardArrowDownIcon,
   KeyboardArrowUp as KeyboardArrowUpIcon,
@@ -30,37 +29,53 @@ import bannerImage from '../../public/banner-image.png';
 import maryProfileImage from '../assets/mary-kitchen.png';
 import { featuredCreations } from '../data/mockData';
 import type { Achievement, Specialty } from '../types';
+import { CakeIcon } from '@heroicons/react/24/outline';
 
 const achievements: Achievement[] = [
   {
-    year: '2015',
-    title: 'Le Cordon Bleu Paris',
-    description: 'Graduated with honors in Pastry Arts. Specialized in French pastry techniques and chocolate work.',
-    icon: <SchoolIcon />,
-  },
-  {
-    year: '2016',
-    title: 'Apprenticeship at Maison Laurent',
-    description: 'Trained under renowned pastry chef Pierre Laurent in his three-star Michelin restaurant.',
-    icon: <RestaurantIcon />,
-  },
-  {
-    year: '2018',
-    title: 'Head Pastry Chef at The Grand Hotel',
-    description: 'Led a team of pastry chefs, creating desserts for high-profile events and weddings.',
+    year: 'Mar 2023 - Present',
+    title: 'Pastry Chef at Lido House, Autograph Collection',
+    description: 'Preparing and decorating pastries for this luxury hotel in Newport Beach. Specializing in presentation, baking techniques, and catering for special events.',
     icon: <StarIcon />,
   },
   {
-    year: '2020',
-    title: 'Sweet Creations Founded',
-    description: 'Launched my own pastry business, focusing on custom cakes and French pastries.',
+    year: 'Mar 2022 - Mar 2023',
+    title: 'Pastry Cook at North Italia',
+    description: 'Prepared Italian breads, pastries, puddings and desserts from scratch. Managed prep stations and ensured quality presentation for all menu items.',
     icon: <RestaurantIcon />,
   },
   {
-    year: '2023',
-    title: 'Best Local Bakery Award',
-    description: 'Received city\'s prestigious culinary award for excellence in pastry arts.',
-    icon: <AwardIcon />,
+    year: 'Sep 2021 - Oct 2022',
+    title: 'Professional Pastry Diploma Program',
+    description: 'Completed extensive training at Culinary Lab Cooking School in Tustin, covering breads, laminated doughs, cake decorating, and advanced pastry techniques.',
+    icon: <SchoolIcon />,
+  },
+  {
+    year: 'Sep 2020 - Jan 2022',
+    title: 'Cake Decorator at Albertsons',
+    description: 'Specialized in decorating cakes for special occasions, including showers, birthdays, and christenings. Assisted customers with planning cake designs.',
+    icon: <CakeIcon />,
+  },
+  {
+    year: 'Oct 2022',
+    title: 'Culinary Lab Apprenticeship',
+    description: 'Completed over 1,000 hours of apprenticeship, applying pastry arts techniques in a professional setting while continuing education modules.',
+    icon: <WorkIcon />,
+  },
+];
+
+const specialties: Specialty[] = [
+  {
+    title: 'Cake Decorating',
+    description: 'Specializing in beautiful, custom-designed cakes for weddings, birthdays, and special events with personalized themes and decorations.',
+  },
+  {
+    title: 'Pastry & Dessert Creation',
+    description: 'Creating artisanal pastries, breads, and desserts using traditional techniques and premium ingredients.',
+  },
+  {
+    title: 'Chocolate & Confectionery Work',
+    description: 'Expert in chocolate tempering, molding, and creating artistic confectionery decorations for special occasions.',
   },
 ];
 
