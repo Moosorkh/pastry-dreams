@@ -218,9 +218,9 @@ export default function Home() {
               src={maryProfileImage} 
               alt="Mary Karimzadeh"
               sx={{
-                width: { xs: 280, md: 350 },
-                height: { xs: 280, md: 350 },
-                boxShadow: 3,
+                width: { xs: 280, md: 400 },
+                height: { xs: 280, md: 400 },
+                boxShadow: 6,
               }}
             />
           </Grid>
