@@ -19,7 +19,6 @@ import {
   Divider,
 } from '@mui/material';
 import {
-  Phone as PhoneIcon,
   Email as EmailIcon,
   LocationOn as LocationIcon,
   AccessTime as TimeIcon,
