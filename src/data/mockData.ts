@@ -5,6 +5,10 @@ import weddingCake from '../../public/wedding-cake1.jpg';
 import assortedPastries from '../../public/assorted-pastries.jpg';
 import birthDayCake from '../../public/chocBdCake.jpg'
 import oreaoChocolateCake from '../../public/chocolateOreaoCake.jpg';
+import cremeFilledCroissants from '../../public/cremeFilledCroissant.jpg';
+import cupCakeTray from '../../public/cupCakeTray.jpg';
+import easterCookies from '../../public/easterCookies.jpg';
+import lemonTart from '../../public/lemonTart.jpg';
 
 
 
@@ -228,28 +232,33 @@ export const recipes: Recipe[] = [
     {
       img: oreaoChocolateCake,
       title: 'Oreao Chocolate Cake',
-      category: 'Breads',
+      category: 'Cakes',
     },
     {
-      img: '/api/placeholder/800/600',
+      img: cremeFilledCroissants,
       title: 'Creme Filled Criossants',
       category: 'Custom Orders',
       featured: true,
     },
     {
-      img: '/api/placeholder/600/600',
-      title: 'Chocolate Eclairs',
+      img: cupCakeTray,
+      title: 'Cupcakes tray',
       category: 'Pastries',
     },
     {
-      img: '/api/placeholder/600/800',
-      title: 'Anniversary Cake',
-      category: 'Cakes',
+      img: easterCookies,
+      title: 'Easter Cookies',
+      category: 'Custom Orders',
       featured: true,
     },
     {
-      img: '/api/placeholder/800/600',
-      title: 'Fruit Tarts',
+      img: lemonTart,
+      title: 'Lemon Tart',
+      category: 'Pastries',
+    },
+    {
+      img: lemonTart,
+      title: 'Lemon Tart',
       category: 'Pastries',
     }
   ];
