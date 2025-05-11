@@ -15,7 +15,6 @@ import {
   ListItemText,
   ListItemIcon,
   Divider,
-  Fade,
 } from '@mui/material';
 import {
   Menu as MenuIcon,
