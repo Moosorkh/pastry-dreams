@@ -1,7 +1,6 @@
 import { Recipe } from '../types/index';
 import strawbwerryCake from '../../public/strawberryCake.jpg';
 import frenchMacarons from '../../public/french-macarons.jpg';
-import weddingCake from '../../public/wedding-cake1.jpg';
 import assortedPastries from '../../public/assorted-pastries.jpg';
 import birthDayCake from '../../public/chocBdCake.jpg'
 import oreaoChocolateCake from '../../public/chocolateOreaoCake.jpg';
@@ -11,6 +10,7 @@ import easterCookies from '../../public/easterCookies.jpg';
 import lemonTart from '../../public/lemonTart.jpg';
 import burgerBuns from '../../public/BurgerBuns.jpg';
 import heartShapedMacarons from '../../public/heartShapedMacarons.jpg';
+import coolaBdCake from '../../public/coolaBdCake.jpg';
 
 
 
@@ -277,7 +277,7 @@ export const recipes: Recipe[] = [
     {
       id: 2,
       title: 'Wedding Cake',
-      image: weddingCake,
+      image: coolaBdCake,
       category: 'Cakes',
       description: 'Elegant multi-tiered cakes for your special day',
     },
