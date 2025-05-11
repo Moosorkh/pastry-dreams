@@ -11,7 +11,6 @@ import {
   Button,
   Paper,
   Avatar,
-  Divider,
 } from '@mui/material';
 import Timeline from '@mui/lab/Timeline';
 import TimelineItem from '@mui/lab/TimelineItem';
@@ -34,9 +33,21 @@ import type { Achievement, Specialty } from '../types';
 
 const achievements: Achievement[] = [
   {
-    year: '2020-2022',
-    title: 'Albertsons, Irvine',
-    description: 'Started my professional journey as a Cake Decorator and Baker, specializing in cakes for special occasions and assisting customers with design concepts.',
+    year: '2024',
+    title: 'Sweet Creations Founded',
+    description: 'Launched my own pastry business, focusing on custom cakes and specialty desserts, bringing together years of expertise and passion for pastry arts.',
+    icon: <AwardIcon />,
+  },
+  {
+    year: '2023-Present',
+    title: 'Lido House, Autograph Collection',
+    description: 'Currently serving as Pastry Chef at this prestigious Newport Beach establishment. Responsible for presentation, decoration, baking, and special event planning.',
+    icon: <StarIcon />,
+  },
+  {
+    year: '2022-2023',
+    title: 'North Italia, Irvine',
+    description: 'Worked as a Pastry Cook preparing Italian breads, pastries, puddings and desserts from scratch. Developed expertise in authentic Italian techniques and presentation.',
     icon: <RestaurantIcon />,
   },
   {
@@ -46,24 +57,13 @@ const achievements: Achievement[] = [
     icon: <SchoolIcon />,
   },
   {
-    year: '2022-2023',
-    title: 'North Italia, Irvine',
-    description: 'Worked as a Pastry Cook preparing Italian breads, pastries, puddings and desserts from scratch. Developed expertise in authentic Italian techniques and presentation.',
+    year: '2020-2022',
+    title: 'Albertsons, Irvine',
+    description: 'Started my professional journey as a Cake Decorator and Baker, specializing in cakes for special occasions and assisting customers with design concepts.',
     icon: <RestaurantIcon />,
   },
-  {
-    year: '2023-Present',
-    title: 'Lido House, Autograph Collection',
-    description: 'Currently serving as Pastry Chef at this prestigious Newport Beach establishment. Responsible for presentation, decoration, baking, and special event planning.',
-    icon: <StarIcon />,
-  },
-  {
-    year: '2024',
-    title: 'Sweet Creations Founded',
-    description: 'Launched my own pastry business, focusing on custom cakes and specialty desserts, bringing together years of expertise and passion for pastry arts.',
-    icon: <AwardIcon />,
-  },
 ];
+
 
 const specialties: Specialty[] = [
   {
