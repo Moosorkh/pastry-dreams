@@ -11,7 +11,7 @@ import {
   Button,
   Paper,
   Avatar,
-
+  Divider,
 } from '@mui/material';
 import Timeline from '@mui/lab/Timeline';
 import TimelineItem from '@mui/lab/TimelineItem';
@@ -34,49 +34,49 @@ import type { Achievement, Specialty } from '../types';
 
 const achievements: Achievement[] = [
   {
-    year: '2015',
-    title: 'Le Cordon Bleu Paris',
-    description: 'Graduated with honors in Pastry Arts. Specialized in French pastry techniques and chocolate work.',
+    year: '2020-2022',
+    title: 'Albertsons, Irvine',
+    description: 'Started my professional journey as a Cake Decorator and Baker, specializing in cakes for special occasions and assisting customers with design concepts.',
+    icon: <RestaurantIcon />,
+  },
+  {
+    year: '2021-2022',
+    title: 'Culinary Lab Cooking School',
+    description: 'Earned Professional Pastry Diploma. Trained in breads, pastries, laminated doughs, chocolates, tiered cakes, and plated desserts. Completed over 1,000 hours of apprenticeship.',
     icon: <SchoolIcon />,
   },
   {
-    year: '2016',
-    title: 'Apprenticeship at Maison Laurent',
-    description: 'Trained under renowned pastry chef Pierre Laurent in his three-star Michelin restaurant.',
+    year: '2022-2023',
+    title: 'North Italia, Irvine',
+    description: 'Worked as a Pastry Cook preparing Italian breads, pastries, puddings and desserts from scratch. Developed expertise in authentic Italian techniques and presentation.',
     icon: <RestaurantIcon />,
   },
   {
-    year: '2018',
-    title: 'Head Pastry Chef at The Grand Hotel',
-    description: 'Led a team of pastry chefs, creating desserts for high-profile events and weddings.',
+    year: '2023-Present',
+    title: 'Lido House, Autograph Collection',
+    description: 'Currently serving as Pastry Chef at this prestigious Newport Beach establishment. Responsible for presentation, decoration, baking, and special event planning.',
     icon: <StarIcon />,
   },
   {
-    year: '2020',
+    year: '2024',
     title: 'Sweet Creations Founded',
-    description: 'Launched my own pastry business, focusing on custom cakes and French pastries.',
-    icon: <RestaurantIcon />,
-  },
-  {
-    year: '2023',
-    title: 'Best Local Bakery Award',
-    description: 'Received city\'s prestigious culinary award for excellence in pastry arts.',
+    description: 'Launched my own pastry business, focusing on custom cakes and specialty desserts, bringing together years of expertise and passion for pastry arts.',
     icon: <AwardIcon />,
   },
 ];
 
 const specialties: Specialty[] = [
   {
-    title: 'Custom Wedding Cakes',
-    description: 'Specializing in elegant, multi-tiered wedding cakes with intricate designs.',
+    title: 'Custom Cake Decoration',
+    description: 'Specializing in elegant, custom-designed cakes for special occasions with personalized themes and artistic decorations.',
   },
   {
-    title: 'French Pastries',
-    description: 'Creating authentic French pastries using traditional techniques and premium ingredients.',
+    title: 'Italian & French Pastries',
+    description: 'Creating authentic European pastries, from Italian breads and donuts to French classics, using traditional techniques and premium ingredients.',
   },
   {
-    title: 'Chocolate Work',
-    description: 'Expert in chocolate tempering, molding, and creating artistic chocolate decorations.',
+    title: 'Special Event Desserts',
+    description: 'Expert in designing and preparing dessert experiences for weddings, corporate events, and holidays with attention to presentation and detail.',
   },
 ];
 
@@ -202,15 +202,15 @@ export default function Home() {
               Master Pastry Chef
             </Typography>
             <Typography paragraph>
-              With over a decade of experience in pastry arts, I've dedicated my life to creating 
-              moments of joy through the art of baking. My journey began in the historic kitchens 
-              of Paris and has led me to create Sweet Creations, where every pastry tells a story.
+              As a talented cake decorator with a passion for baking and pastry arts, I've dedicated 
+              my career to creating memorable dessert experiences. My journey through the culinary 
+              world has brought me from custom cake decoration to leading pastry operations at a premier hotel property.
             </Typography>
             <Typography paragraph>
-              After graduating with honors from Le Cordon Bleu Paris, I trained under renowned pastry chef 
-              Pierre Laurent in his three-star Michelin restaurant, where I honed my skills in French patisserie 
-              and chocolate work. This invaluable experience shaped my dedication to excellence and attention to detail 
-              that defines my approach to pastry arts today.
+              After completing my Professional Pastry Diploma at Culinary Lab Cooking School in Tustin, where I trained 
+              in everything from basic breads to advanced plated desserts, I refined my skills working in prestigious 
+              establishments including North Italia and currently at Lido House in Newport Beach. This diverse experience 
+              has shaped my dedication to excellence and attention to detail that defines my approach to pastry arts today.
             </Typography>
           </Grid>
           <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -407,9 +407,10 @@ export default function Home() {
           }}
         >
           <Typography variant="h5" align="center" paragraph>
-            "I believe that every pastry should be a work of art – a perfect blend of 
-            traditional techniques and creative innovation. Quality ingredients, attention 
-            to detail, and passion are the key ingredients in everything I create."
+            "I believe that every dessert should be a work of art that brings joy to those who experience it. 
+            With an outgoing personality and a drive for excellence, I blend technical skill with creativity to 
+            craft pastries that are both visually stunning and delicious. Quality ingredients, meticulous attention 
+            to detail, and passion are the essential elements in everything I create."
           </Typography>
         </Paper>
       </Container>
