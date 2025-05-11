@@ -3,6 +3,9 @@ import strawbwerryCake from '../../public/strawberryCake.jpg';
 import frenchMacarons from '../../public/french-macarons.jpg';
 import weddingCake from '../../public/wedding-cake1.jpg';
 import assortedPastries from '../../public/assorted-pastries.jpg';
+import birthDayCake from '../../public/chocBdCake.jpg'
+import oreaoChocolateCake from '../../public/chocolateOreaoCake.jpg';
+
 
 
 // Recipe data for RecipeDetail and Recipes components
@@ -218,18 +221,18 @@ export const recipes: Recipe[] = [
       category: 'Pastries',
     },
     {
-      img: '/api/placeholder/600/800',
+      img: birthDayCake,
       title: 'Birthday Cake',
       category: 'Cakes',
     },
     {
-      img: '/api/placeholder/600/600',
-      title: 'Artisan Croissants',
+      img: oreaoChocolateCake,
+      title: 'Oreao Chocolate Cake',
       category: 'Breads',
     },
     {
       img: '/api/placeholder/800/600',
-      title: 'Custom Wedding Cake',
+      title: 'Creme Filled Criossants',
       category: 'Custom Orders',
       featured: true,
     },
