@@ -20,6 +20,7 @@ import {
     StarBorder as StarIcon,
   } from '@mui/icons-material';
   import type { Achievement, Specialty } from '../types';
+  import maryKitchen from '../assets/mary-kitchen.png';
   
   const achievements: Achievement[] = [
     {
@@ -96,7 +97,7 @@ import {
             <Grid item xs={12} md={6}>
               <Box
                 component="img"
-                src="src\assets\mary-kitchen.jpg"
+                src={maryKitchen}
                 alt="Mary in her kitchen"
                 sx={{
                   width: '100%',

@@ -27,7 +27,7 @@ import {
   KeyboardArrowUp as KeyboardArrowUpIcon,
 } from '@mui/icons-material';
 import bannerImage from '../../public/banner-image.png';
-import maryProfileImage from '../assets/mary-kitchen.jpg';
+import maryProfileImage from '../assets/mary-kitchen.png';
 import { featuredCreations } from '../data/mockData';
 import type { Achievement, Specialty } from '../types';
 
