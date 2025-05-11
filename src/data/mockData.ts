@@ -9,7 +9,7 @@ import cremeFilledCroissants from '../../public/cremeFilledCroissant.jpg';
 import cupCakeTray from '../../public/cupCakeTray.jpg';
 import easterCookies from '../../public/easterCookies.jpg';
 import lemonTart from '../../public/lemonTart.jpg';
-import burgerBuns from '../../public/burgerBuns.jpg';
+import burgerBuns from '../../public/BurgerBuns.jpg';
 import heartShapedMacarons from '../../public/heartShapedMacarons.jpg';
 
 
