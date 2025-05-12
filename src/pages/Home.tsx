@@ -128,9 +128,14 @@ function ScrollToTop() {
 export default function Home() {
   const [showFullJourney, setShowFullJourney] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
+  const [prevSlide, setPrevSlide] = useState(0);
+  const [slideDirection, setSlideDirection] = useState('left');
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  
   const aboutSectionRef = useRef<HTMLDivElement>(null);
   const journeySectionRef = useRef<HTMLDivElement>(null);
   const skillsSectionRef = useRef<HTMLDivElement>(null);
+  const carouselRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
 
   useEffect(() => {
@@ -148,21 +153,75 @@ export default function Home() {
     .slice(0, 6);
 
   const handleNextSlide = () => {
+    if (isTransitioning) return;
+    
+    setIsTransitioning(true);
+    setPrevSlide(activeSlide);
+    setSlideDirection('left');
     setActiveSlide((prev) => (prev === featuredItems.length - 1 ? 0 : prev + 1));
+    
+    // Reset transitioning state after animation completes
+    setTimeout(() => {
+      setIsTransitioning(false);
+    }, 500);
   };
 
   const handlePrevSlide = () => {
+    if (isTransitioning) return;
+    
+    setIsTransitioning(true);
+    setPrevSlide(activeSlide);
+    setSlideDirection('right');
     setActiveSlide((prev) => (prev === 0 ? featuredItems.length - 1 : prev - 1));
+    
+    // Reset transitioning state after animation completes
+    setTimeout(() => {
+      setIsTransitioning(false);
+    }, 500);
   };
+
+  const handleDotClick = (index: number) => {
+    if (isTransitioning || index === activeSlide) return;
+    
+    setIsTransitioning(true);
+    setPrevSlide(activeSlide);
+    setSlideDirection(index > activeSlide ? 'left' : 'right');
+    setActiveSlide(index);
+    
+    // Reset transitioning state after animation completes
+    setTimeout(() => {
+      setIsTransitioning(false);
+    }, 500);
+  };
+
+  // Keyboard navigation for carousel
+  useEffect(() => {
+    const handleKeyDown = (e: { key: string; }) => {
+      if (carouselRef.current && carouselRef.current.contains(document.activeElement)) {
+        if (e.key === 'ArrowLeft') {
+          handlePrevSlide();
+        } else if (e.key === 'ArrowRight') {
+          handleNextSlide();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [activeSlide, isTransitioning]);
 
   // Auto-advance slides
   useEffect(() => {
     const interval = setInterval(() => {
-      handleNextSlide();
+      if (!document.hidden && !isTransitioning) {
+        handleNextSlide();
+      }
     }, 5000); // Change slide every 5 seconds
 
     return () => clearInterval(interval); // Cleanup on unmount
-  }, [featuredItems.length]);
+  }, [activeSlide, isTransitioning]);
 
   return (
     <Box>
@@ -413,11 +472,11 @@ export default function Home() {
         </Container>
       </Box>
 
-      {/* Featured Creations Carousel */}
+      {/* Featured Creations Carousel - IMPROVED */}
       <Box sx={{ py: 8 }}>
         <Container maxWidth="lg">
           <Typography 
-            variant="h2" 
+            variant="h4" 
             align="center" 
             sx={{ 
               mb: 5,
@@ -441,33 +500,70 @@ export default function Home() {
             Featured Creations
           </Typography>
           
-          {/* Simple carousel to match screenshot */}
-          <Box sx={{ position: 'relative', mb: 6 }}>
+          {/* Improved carousel with smooth transitions */}
+          <Box 
+            sx={{ 
+              position: 'relative', 
+              mb: 6, 
+              height: { xs: '550px', md: '400px' },
+              borderRadius: 2,
+              boxShadow: 3,
+              overflow: 'hidden',
+            }}
+            ref={carouselRef}
+            tabIndex={0}
+            aria-label="Featured creations carousel"
+            role="region"
+          >
             {featuredItems.map((item, index) => (
               <Box
                 key={item.id}
+                aria-hidden={activeSlide !== index}
+                aria-label={`Slide ${index + 1} of ${featuredItems.length}: ${item.alt}`}
                 sx={{
-                  display: index === activeSlide ? 'block' : 'none',
-                  borderRadius: 2,
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  opacity: activeSlide === index ? 1 : 0,
+                  transform: `translateX(${
+                    activeSlide === index 
+                      ? '0%' 
+                      : prevSlide === index && slideDirection === 'left'
+                        ? '-100%'
+                        : prevSlide === index && slideDirection === 'right'
+                          ? '100%'
+                          : slideDirection === 'left'
+                            ? '100%'
+                            : '-100%'
+                  })`,
+                  transition: 'transform 0.5s ease, opacity 0.5s ease',
+                  zIndex: activeSlide === index ? 2 : 1,
                   overflow: 'hidden',
-                  boxShadow: 3,
+                  backgroundColor: 'background.paper',
                 }}
               >
-                <Grid container sx={{ bgcolor: 'background.paper' }}>
-                  <Grid item xs={12} md={8}>
+                <Grid container sx={{ height: '100%' }}>
+                  <Grid item xs={12} md={8} sx={{ height: { xs: '250px', md: '100%' } }}>
                     <Box
                       component="img"
                       src={item.src}
                       alt={item.alt}
                       sx={{
                         width: '100%',
-                        height: { xs: '250px', md: '400px' },
+                        height: '100%',
                         objectFit: 'cover',
                       }}
                     />
                   </Grid>
                   <Grid item xs={12} md={4}>
-                    <Box sx={{ p: 4, height: '100%', display: 'flex', flexDirection: 'column' }}>
+                    <Box sx={{ 
+                      p: { xs: 2, md: 4 }, 
+                      height: '100%', 
+                      display: 'flex', 
+                      flexDirection: 'column' 
+                    }}>
                       <Chip
                         label={item.category}
                         color="primary"
@@ -477,7 +573,11 @@ export default function Home() {
                       <Typography
                         variant="h4"
                         gutterBottom
-                        sx={{ fontFamily: 'Playfair Display', fontWeight: 500 }}
+                        sx={{ 
+                          fontFamily: 'Playfair Display', 
+                          fontWeight: 500,
+                          fontSize: { xs: '1.5rem', md: '2rem' }
+                        }}
                       >
                         {item.alt}
                       </Typography>
@@ -500,53 +600,89 @@ export default function Home() {
 
             {/* Navigation arrows */}
             <IconButton
+              aria-label="Previous slide"
               sx={{
                 position: 'absolute',
-                left: { xs: 10, sm: -20 },
+                left: { xs: 8, sm: 16 },
                 top: '50%',
                 transform: 'translateY(-50%)',
-                bgcolor: 'rgba(0,0,0,0.3)',
+                bgcolor: 'rgba(0,0,0,0.5)',
                 color: 'white',
-                '&:hover': { bgcolor: 'rgba(0,0,0,0.5)' },
-                zIndex: 2,
+                '&:hover': { 
+                  bgcolor: 'rgba(0,0,0,0.7)',
+                  transform: 'translateY(-50%) scale(1.1)'
+                },
+                zIndex: 10,
+                transition: 'all 0.2s ease',
               }}
               onClick={handlePrevSlide}
+              disabled={isTransitioning}
             >
               <KeyboardArrowLeftIcon fontSize="large" />
             </IconButton>
             <IconButton
+              aria-label="Next slide"
               sx={{
                 position: 'absolute',
-                right: { xs: 10, sm: -20 },
+                right: { xs: 8, sm: 16 },
                 top: '50%',
                 transform: 'translateY(-50%)',
-                bgcolor: 'rgba(0,0,0,0.3)',
+                bgcolor: 'rgba(0,0,0,0.5)',
                 color: 'white',
-                '&:hover': { bgcolor: 'rgba(0,0,0,0.5)' },
-                zIndex: 2,
+                '&:hover': { 
+                  bgcolor: 'rgba(0,0,0,0.7)',
+                  transform: 'translateY(-50%) scale(1.1)'
+                },
+                zIndex: 10,
+                transition: 'all 0.2s ease',
               }}
               onClick={handleNextSlide}
+              disabled={isTransitioning}
             >
               <KeyboardArrowRightIcon fontSize="large" />
             </IconButton>
 
             {/* Indicator dots */}
-            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+            <Box 
+              sx={{ 
+                display: 'flex', 
+                justifyContent: 'center', 
+                position: 'absolute',
+                bottom: 16,
+                left: 0,
+                right: 0,
+                zIndex: 10
+              }}
+              role="tablist"
+              aria-label="Carousel navigation"
+            >
               {featuredItems.map((_, index) => (
                 <Box
                   key={index}
-                  onClick={() => setActiveSlide(index)}
+                  onClick={() => handleDotClick(index)}
+                  role="tab"
+                  tabIndex={0}
+                  aria-selected={activeSlide === index}
+                  aria-label={`Go to slide ${index + 1}`}
                   sx={{
                     width: 12,
                     height: 12,
                     borderRadius: '50%',
                     mx: 0.5,
-                    bgcolor: index === activeSlide ? 'primary.main' : 'grey.400',
+                    bgcolor: index === activeSlide ? 'primary.main' : 'rgba(255,255,255,0.7)',
                     cursor: 'pointer',
                     transition: 'all 0.3s ease',
+                    transform: index === activeSlide ? 'scale(1.2)' : 'scale(1)',
                     '&:hover': {
                       transform: 'scale(1.2)',
+                      bgcolor: index === activeSlide ? 'primary.main' : 'rgba(255,255,255,0.9)',
                     },
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      handleDotClick(index);
+                      e.preventDefault();
+                    }
                   }}
                 />
               ))}
@@ -673,6 +809,7 @@ export default function Home() {
                   backgroundColor: 'rgba(233, 30, 99, 0.08)',
                 },
               }}
+              aria-expanded={showFullJourney}
             >
               {showFullJourney ? 'Show Less' : 'View Full Journey'}
             </Button>
