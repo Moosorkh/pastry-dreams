@@ -73,7 +73,7 @@ const achievements = [
   },
   {
     year: '2023-Present',
-    title: 'Pastry Chef at Lido House',
+    title: 'Pastry Cook at Lido House',
     description: 'Leading pastry operations at this prestigious Newport Beach establishment. Responsible for presentation, decoration, baking, and special event planning.',
     icon: <StarIcon />,
   },
@@ -271,7 +271,7 @@ export default function Home() {
                 fontWeight: 500
               }}
             >
-              Award-Winning Pastry Chef | Custom Cakes & Artisan Pastries
+              Award-Winning Pastry Cook | Custom Cakes & Artisan Pastries
             </Typography>
             <Button 
               variant="contained" 
@@ -350,7 +350,7 @@ export default function Home() {
               color="primary" 
               sx={{ mb: 2, fontWeight: 500 }}
             >
-              Passionate Pastry Chef with Over 5 Years of Experience
+              Passionate Pastry Cook with Over 5 Years of Experience
             </Typography>
             <Typography paragraph>
               Mary Karimzadeh is a talented cake decorator with a passion for baking and pastry arts. Her expertise ranges from elegant cake decoration to creating French and Italian pastries with a focus on special events and custom creations.
