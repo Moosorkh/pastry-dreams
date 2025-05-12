@@ -5,16 +5,11 @@ import {
   Container,
   Typography,
   Grid,
-  Card,
-  CardContent,
-  CardMedia,
   Button,
   Paper,
   Avatar,
-  Collapse,
   IconButton,
   Chip,
-  Divider,
   Fade,
   useScrollTrigger,
   Zoom,
@@ -40,7 +35,7 @@ import {
   Celebration as CelebrationIcon,
   KeyboardDoubleArrowUp as KeyboardDoubleArrowUpIcon,
 } from '@mui/icons-material';
-import { featuredCreations, galleryItems } from '../data/mockData';
+import { galleryItems } from '../data/mockData';
 import bannerImage from '../../public/banner-image.png';
 import maryProfileImage from '../assets/mary-kitchen.png';
 
