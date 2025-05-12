@@ -280,7 +280,7 @@ export const recipes: Recipe[] = [
     },
     {
       id: 2,
-      title: 'Wedding Cake',
+      title: '3 Tiered Cake',
       image: coolaBdCake,
       category: 'Cakes',
       description: 'Elegant multi-tiered cakes for your special day',
