@@ -22,6 +22,7 @@ export default function Gallery() {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
   const [selectedTitle, setSelectedTitle] = useState('');
+  const [selectedDescription, setSelectedDescription] = useState('');
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -38,9 +39,10 @@ export default function Gallery() {
       ? galleryItems
       : galleryItems.filter((item) => item.category === selectedCategory);
 
-  const handleOpenModal = (src: string, alt: string) => {
+  const handleOpenModal = (src: string, alt: string, description: string = '') => {
     setSelectedImage(src);
     setSelectedTitle(alt);
+    setSelectedDescription(description); // Use the description parameter
     setModalOpen(true);
   };
 
@@ -102,7 +104,7 @@ export default function Gallery() {
                   transform: 'scale(1.02)',
                 },
               }}
-              onClick={() => handleOpenModal(item.src, item.alt)}
+              onClick={() => handleOpenModal(item.src, item.alt, item.description || '')}
             >
               <img
                 src={item.src}
@@ -137,45 +139,60 @@ export default function Gallery() {
         </ImageList>
 
         <Modal
-          open={modalOpen}
-          onClose={handleCloseModal}
-          closeAfterTransition
-          slots={{ backdrop: Backdrop }}
-          slotProps={{ backdrop: { timeout: 500 } }}
-        >
-          <Fade in={modalOpen}>
-            <Box
-              sx={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                maxWidth: '90%',
-                maxHeight: '90%',
-                boxShadow: 24,
-                outline: 'none',
-                bgcolor: 'background.paper',
-                borderRadius: 2,
-                overflow: 'auto',
-              }}
-            >
-              <img
-                src={selectedImage}
-                alt={selectedTitle}
-                style={{
-                  maxWidth: '100%',
-                  maxHeight: '80vh',
-                  display: 'block',
-                  margin: '0 auto',
-                  borderRadius: '8px 8px 0 0',
-                }}
-              />
-              <Typography variant="h6" sx={{ p: 2, textAlign: 'center' }}>
-                {selectedTitle}
-              </Typography>
-            </Box>
-          </Fade>
-        </Modal>
+  open={modalOpen}
+  onClose={handleCloseModal}
+  closeAfterTransition
+  slots={{ backdrop: Backdrop }}
+  slotProps={{ backdrop: { timeout: 500 } }}
+>
+  <Fade in={modalOpen}>
+    <Box
+      sx={{
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        maxWidth: '90%',
+        maxHeight: '90%',
+        boxShadow: 24,
+        outline: 'none',
+        bgcolor: 'background.paper',
+        borderRadius: 2,
+        overflow: 'auto',
+      }}
+    >
+      <img
+        src={selectedImage}
+        alt={selectedTitle}
+        style={{
+          maxWidth: '100%',
+          maxHeight: '75vh',
+          display: 'block',
+          margin: '0 auto',
+          borderRadius: '8px 8px 0 0',
+        }}
+      />
+      <Box sx={{ p: 2 }}>
+        <Typography variant="h6" sx={{ textAlign: 'center' }}>
+          {selectedTitle}
+        </Typography>
+        {selectedDescription && (
+          <Typography 
+            variant="body1" 
+            color="text.secondary" 
+            sx={{ 
+              mt: 1, 
+              textAlign: 'center',
+              px: 2 
+            }}
+          >
+            {selectedDescription}
+          </Typography>
+        )}
+      </Box>
+    </Box>
+  </Fade>
+</Modal>
       </Box>
     </Container>
   );
