@@ -104,87 +104,127 @@ export default function Home() {
 
   return (
     <Box>
-      {/* Hero Section */}
-      <Paper 
-        elevation={0} 
-        sx={{ 
-          position: 'relative',
-          backgroundColor: 'grey.800',
-          color: '#fff',
-          mb: 6,
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center',
-          backgroundImage: `url(${bannerImage})`,
-          minHeight: '500px',
-        }}
-      >
-        {/* Overlay for text readability */}
+ {/* Hero Section - Reduced Height and Constrained Text Width */}
+<Paper 
+  elevation={0} 
+  sx={{ 
+    position: 'relative',
+    backgroundColor: 'grey.800',
+    color: '#fff',
+    mb: 6,
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+    backgroundImage: `url(${bannerImage})`,
+    minHeight: { xs: '400px', md: '450px' }, // Reduced from 500px
+  }}
+>
+  {/* Overlay for text readability */}
+  <Box
+    sx={{
+      position: 'absolute',
+      top: 0,
+      bottom: 0,
+      right: 0,
+      left: 0,
+      backgroundColor: 'rgba(0,0,0,0.35)',
+    }}
+  />
+  <Container maxWidth="xl">
+    <Grid container>
+      <Grid item xs={12} sm={10} md={6} lg={5}> {/* Constrained width */}
         <Box
           sx={{
-            position: 'absolute',
-            top: 0,
-            bottom: 0,
-            right: 0,
-            left: 0,
-            backgroundColor: 'rgba(0,0,0,.5)',
+            position: 'relative',
+            p: { xs: 3, md: 4 },
+            pl: { xs: 3, md: 2 },
+            pr: { md: 0 },
+            pt: { xs: 6, md: 10 }, // Reduced top padding
+            maxWidth: { xs: '100%', sm: '540px' }, // Explicit max width constraint
           }}
-        />
-        <Container maxWidth="lg">
-          <Grid container>
-            <Grid item md={6}>
-              <Box
-                sx={{
-                  position: 'relative',
-                  p: { xs: 3, md: 6 },
-                  pr: { md: 0 },
-                  pt: { xs: 8, md: 12 },
-                }}
-              >
-                <Typography 
-                  component="h1" 
-                  variant="h2" 
-                  color="inherit" 
-                  gutterBottom
-                  sx={{ fontFamily: 'Playfair Display' }}
-                >
-                  Crafting Sweet Moments
-                </Typography>
-                <Typography variant="h5" color="inherit" paragraph>
-                  Each creation is a unique blend of traditional techniques and modern creativity. 
-                  From elegant wedding cakes to delicate French pastries, we bring your sweetest dreams to life.
-                </Typography>
-                <Button 
-                  variant="contained" 
-                  component={RouterLink} 
-                  to="/gallery"
-                  size="large"
-                  sx={{ mt: 2, mr: 2 }}
-                >
-                  View Gallery
-                </Button>
-                <Button 
-                  variant="outlined" 
-                  component={RouterLink} 
-                  to="/contact"
-                  size="large"
-                  sx={{ 
-                    mt: 2,
-                    color: 'white',
-                    borderColor: 'white',
-                    '&:hover': {
-                      borderColor: 'white',
-                      backgroundColor: 'rgba(255,255,255,0.1)',
-                    },
-                  }}
-                >
-                  Contact Me
-                </Button>
-              </Box>
-            </Grid>
-          </Grid>
-        </Container>
-      </Paper>
+        >
+          <Typography 
+            component="h1" 
+            variant="h2" 
+            color="inherit" 
+            gutterBottom
+            sx={{ 
+              fontFamily: 'Playfair Display',
+              fontWeight: 700,
+              textShadow: '1px 1px 4px rgba(0,0,0,0.5)',
+              fontSize: { xs: '2.5rem', md: '3.5rem' }, // Responsive font size
+            }}
+          >
+            Crafting Sweet Moments
+          </Typography>
+          <Typography 
+            variant="h5" 
+            color="inherit" 
+            paragraph
+            sx={{
+              textShadow: '1px 1px 3px rgba(0,0,0,0.4)',
+              mb: 3,
+              maxWidth: '500px', // Constrain paragraph width
+              fontSize: { xs: '1.1rem', md: '1.25rem' }, // Slightly smaller font
+            }}
+          >
+            Each creation is a unique blend of traditional techniques and modern creativity. 
+            From elegant wedding cakes to delicate French pastries, we bring your sweetest dreams to life.
+          </Typography>
+          <Box sx={{ mt: 2 }}> {/* Reduced margin */}
+            <Button 
+              variant="contained" 
+              component={RouterLink} 
+              to="/gallery"
+              size="large"
+              sx={{ 
+                mt: 1, 
+                mr: 2,
+                borderRadius: 2,
+                px: 3,
+                py: 0.75, // Slightly reduced padding
+                boxShadow: 3,
+                backgroundColor: 'primary.main',
+                '&:hover': {
+                  backgroundColor: 'primary.dark',
+                  transform: 'translateY(-2px)',
+                  boxShadow: 4,
+                },
+                transition: 'all 0.3s ease',
+              }}
+            >
+              View Gallery
+            </Button>
+            <Button 
+              variant="outlined" 
+              component={RouterLink} 
+              to="/contact"
+              size="large"
+              sx={{ 
+                mt: 1,
+                borderRadius: 2,
+                px: 3,
+                py: 0.75, // Slightly reduced padding
+                color: 'white',
+                borderColor: 'white',
+                borderWidth: 2,
+                '&:hover': {
+                  borderColor: 'white',
+                  backgroundColor: 'rgba(255,255,255,0.15)',
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+                },
+                transition: 'all 0.3s ease',
+              }}
+            >
+              Contact Me
+            </Button>
+          </Box>
+        </Box>
+      </Grid>
+    </Grid>
+  </Container>
+</Paper>
 
       {/* About Mary Section */}
       <Container maxWidth="lg" sx={{ mb: 8 }} ref={aboutSectionRef} id="about">
