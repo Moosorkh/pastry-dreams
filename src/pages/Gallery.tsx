@@ -89,6 +89,7 @@ export default function Gallery() {
             <ImageListItem
               key={item.title}
               sx={{
+                cursor: 'pointer',
                 overflow: 'hidden',
                 borderRadius: 2,
                 boxShadow: 2,
