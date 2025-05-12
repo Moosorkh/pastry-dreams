@@ -1,5 +1,6 @@
 import { ReactElement } from 'react';
 
+
 export interface Achievement {
   year: string;
   title: string;
@@ -37,6 +38,9 @@ export interface GalleryItem {
   src: string;
   alt: string;
   category: string;
+  description?: string;
+  galleryId?: string;
+  featured?: boolean;
 }
   
 // Contact Form Types

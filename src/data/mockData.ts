@@ -1,4 +1,4 @@
-import { Recipe } from '../types/index';
+import { Recipe, GalleryItem } from '../types/index';
 import strawbwerryCake from '../../public/strawberryCake.jpg';
 import frenchMacarons from '../../public/french-macarons.jpg';
 import assortedPastries from '../../public/assorted-pastries.jpg';
@@ -22,7 +22,6 @@ import pinkBdCake from '../../public/pinkBdCake.jpg';
 import watermelonCake from '../../public/watermelonCake.jpg';
 import weddingCake from '../../public/wedding-cake1.jpg';
 import whiteWideCake from '../../public/whiteWideCake.jpg';
-
 
 
 // Recipe data for RecipeDetail and Recipes components
@@ -224,33 +223,177 @@ export const recipes: Recipe[] = [
     }
   ];
   
-  // Gallery items for Gallery component
-  export const galleryItems = [
-    { img: strawbwerryCake, title: 'Strawberry Cake', category: 'Cakes', featured: true },
-    { img: frenchMacarons, title: 'Heart Shaped French Macarons', category: 'Pastries' },
-    { img: assortedPastries, title: 'Assorted Pastries', category: 'Breads' },
-    { img: birthDayCake, title: 'Birthday Cake', category: 'Cakes' },
-    { img: oreaoChocolateCake, title: 'Oreao Chocolate Cake', category: 'Cakes' },
-    { img: cremeFilledCroissants, title: 'Creme Filled Croissants', category: 'Custom Orders', featured: true },
-    { img: cupCakeTray, title: 'Cupcakes Tray', category: 'Pastries' },
-    { img: easterCookies, title: 'Easter Cookies', category: 'Custom Orders', featured: true },
-    { img: lemonTart, title: 'Lemon Tart', category: 'Pastries' },
-    { img: burgerBuns, title: 'Burger Buns', category: 'Breads' },
-    { img: heartShapedMacarons, title: 'Heart Shaped Macarons', category: 'Pastries' },
-    { img: coolaBdCake, title: 'Coola Birthday Cake', category: 'Cakes' },
-    { img: classicFrenchMacarons, title: 'Classic French Macarons', category: 'Pastries' },
-    { img: chocolateSouffle, title: 'Chocolate Souffle', category: 'Desserts' },
-    { img: artisanChroissants, title: 'Artisan Croissants', category: 'Breads' },
-    { img: operaCake, title: 'Opera Cake', category: 'Cakes' },
-    { img: layeredChocolateCake, title: 'Layered Chocolate Cake', category: 'Cakes' },
-    { img: mermaidBdCake, title: 'Mermaid Birthday Cake', category: 'Cakes' },
-    { img: monsterCookieBdCake, title: 'Monster Cookie Birthday Cake', category: 'Cakes' },
-    { img: pinkBdCake, title: 'Pink Birthday Cake', category: 'Cakes' },
-    { img: watermelonCake, title: 'Watermelon Cake', category: 'Cakes' },
-    { img: weddingCake, title: 'Wedding Cake', category: 'Cakes' },
-    { img: whiteWideCake, title: 'White Wide Cake', category: 'Cakes' }
-  ];
-  
+  // Gallery items for Gallery component (updated to match GalleryItem interface)
+export const galleryItems: GalleryItem[] = [
+  { 
+    id: '1', 
+    src: strawbwerryCake, 
+    alt: 'Strawberry Cake', 
+    category: 'Cakes', 
+    description: 'A delightful strawberry cake with fresh strawberries and whipped cream.',
+    featured: true 
+  },
+  { 
+    id: '2', 
+    src: frenchMacarons, 
+    alt: 'Heart Shaped French Macarons', 
+    category: 'Pastries',
+    description: 'Beautiful heart-shaped macarons filled with raspberry ganache.',
+    featured: false
+  },
+  { 
+    id: '3', 
+    src: assortedPastries, 
+    alt: 'Assorted Pastries', 
+    category: 'Breads',
+    featured: false 
+  },
+  { 
+    id: '4', 
+    src: birthDayCake, 
+    alt: 'Birthday Cake', 
+    category: 'Cakes',
+    featured: false 
+  },
+  { 
+    id: '5', 
+    src: oreaoChocolateCake, 
+    alt: 'Oreao Chocolate Cake', 
+    category: 'Cakes',
+    featured: false 
+  },
+  { 
+    id: '6', 
+    src: cremeFilledCroissants, 
+    alt: 'Creme Filled Croissants', 
+    category: 'Custom Orders',
+    featured: true 
+  },
+  { 
+    id: '7', 
+    src: cupCakeTray, 
+    alt: 'Cupcakes Tray', 
+    category: 'Pastries',
+    featured: false 
+  },
+  { 
+    id: '8', 
+    src: easterCookies, 
+    alt: 'Easter Cookies', 
+    category: 'Custom Orders',
+    description: 'Beautifully decorated Easter-themed cookies, perfect for celebrations.',
+    featured: true 
+  },
+  { 
+    id: '9', 
+    src: lemonTart, 
+    alt: 'Lemon Tart', 
+    category: 'Pastries',
+    featured: false 
+  },
+  { 
+    id: '10', 
+    src: burgerBuns, 
+    alt: 'Burger Buns', 
+    category: 'Breads',
+    featured: false 
+  },
+  { 
+    id: '11', 
+    src: heartShapedMacarons, 
+    alt: 'Heart Shaped Macarons', 
+    category: 'Pastries',
+    description: 'Delicate heart-shaped macarons filled with premium ganache.',
+    featured: true 
+  },
+  { 
+    id: '12', 
+    src: coolaBdCake, 
+    alt: 'Coola Birthday Cake', 
+    category: 'Cakes',
+    featured: false 
+  },
+  { 
+    id: '13', 
+    src: classicFrenchMacarons, 
+    alt: 'Classic French Macarons', 
+    category: 'Pastries',
+    description: 'Traditional French macarons with a variety of fillings.',
+    featured: true 
+  },
+  { 
+    id: '14', 
+    src: chocolateSouffle, 
+    alt: 'Chocolate Souffle', 
+    category: 'Desserts',
+    featured: false 
+  },
+  { 
+    id: '15', 
+    src: artisanChroissants, 
+    alt: 'Artisan Croissants', 
+    category: 'Breads',
+    description: 'Flaky, buttery croissants made from scratch using traditional techniques.',
+    featured: true 
+  },
+  { 
+    id: '16', 
+    src: operaCake, 
+    alt: 'Opera Cake', 
+    category: 'Cakes',
+    featured: false 
+  },
+  { 
+    id: '17', 
+    src: layeredChocolateCake, 
+    alt: 'Layered Chocolate Cake', 
+    category: 'Cakes',
+    featured: false 
+  },
+  { 
+    id: '18', 
+    src: mermaidBdCake, 
+    alt: 'Mermaid Birthday Cake', 
+    category: 'Cakes',
+    featured: false 
+  },
+  { 
+    id: '19', 
+    src: monsterCookieBdCake, 
+    alt: 'Monster Cookie Birthday Cake', 
+    category: 'Cakes',
+    featured: false 
+  },
+  { 
+    id: '20', 
+    src: pinkBdCake, 
+    alt: 'Pink Birthday Cake', 
+    category: 'Cakes',
+    featured: false 
+  },
+  { 
+    id: '21', 
+    src: watermelonCake, 
+    alt: 'Watermelon Cake', 
+    category: 'Cakes',
+    featured: false 
+  },
+  { 
+    id: '22', 
+    src: weddingCake, 
+    alt: 'Wedding Cake', 
+    category: 'Cakes',
+    description: 'Elegant multi-tiered wedding cake with intricate decorations.',
+    featured: true 
+  },
+  { 
+    id: '23', 
+    src: whiteWideCake, 
+    alt: 'White Wide Cake', 
+    category: 'Cakes',
+    featured: false 
+  }
+];
   // Featured creations for Home component
   export const featuredCreations = [
     {

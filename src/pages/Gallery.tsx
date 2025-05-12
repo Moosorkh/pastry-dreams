@@ -38,9 +38,9 @@ export default function Gallery() {
       ? galleryItems
       : galleryItems.filter((item) => item.category === selectedCategory);
 
-  const handleOpenModal = (img: string, title: string) => {
-    setSelectedImage(img);
-    setSelectedTitle(title);
+  const handleOpenModal = (src: string, alt: string) => {
+    setSelectedImage(src);
+    setSelectedTitle(alt);
     setModalOpen(true);
   };
 
@@ -87,7 +87,7 @@ export default function Gallery() {
         >
           {filteredItems.map((item) => (
             <ImageListItem
-              key={item.title}
+              key={item.id}
               sx={{
                 cursor: 'pointer',
                 overflow: 'hidden',
@@ -102,11 +102,11 @@ export default function Gallery() {
                   transform: 'scale(1.02)',
                 },
               }}
-              onClick={() => handleOpenModal(item.img, item.title)}
+              onClick={() => handleOpenModal(item.src, item.alt)}
             >
               <img
-                src={item.img}
-                alt={item.title}
+                src={item.src}
+                alt={item.alt}
                 loading="lazy"
                 style={{ width: '100%', display: 'block' }}
               />
@@ -125,7 +125,12 @@ export default function Gallery() {
                   transition: 'opacity 0.3s',
                 }}
               >
-                <Typography variant="subtitle1">{item.title}</Typography>
+                <Typography variant="subtitle1">{item.alt}</Typography>
+                {item.description && (
+                  <Typography variant="body2" sx={{ mt: 0.5, opacity: 0.8 }}>
+                    {item.description}
+                  </Typography>
+                )}
               </Box>
             </ImageListItem>
           ))}
