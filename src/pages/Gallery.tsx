@@ -166,7 +166,7 @@ export default function Gallery() {
         alt={selectedTitle}
         style={{
           maxWidth: '100%',
-          maxHeight: '75vh',
+          maxHeight: isMobile ? '95vh' : '75vh',
           display: 'block',
           margin: '0 auto',
           borderRadius: '8px 8px 0 0',
