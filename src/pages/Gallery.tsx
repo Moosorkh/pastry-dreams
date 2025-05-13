@@ -139,60 +139,74 @@ export default function Gallery() {
         </ImageList>
 
         <Modal
-  open={modalOpen}
-  onClose={handleCloseModal}
-  closeAfterTransition
-  slots={{ backdrop: Backdrop }}
-  slotProps={{ backdrop: { timeout: 500 } }}
->
-  <Fade in={modalOpen}>
-    <Box
-      sx={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        maxWidth: '90%',
-        maxHeight: '90%',
-        boxShadow: 24,
-        outline: 'none',
-        bgcolor: 'background.paper',
-        borderRadius: 2,
-        overflow: 'auto',
-      }}
-    >
-      <img
-        src={selectedImage}
-        alt={selectedTitle}
-        style={{
-          maxWidth: '100%',
-          maxHeight: isMobile ? '95vh' : '75vh',
-          display: 'block',
-          margin: '0 auto',
-          borderRadius: '8px 8px 0 0',
-        }}
-      />
-      <Box sx={{ p: 2 }}>
-        <Typography variant="h6" sx={{ textAlign: 'center' }}>
-          {selectedTitle}
-        </Typography>
-        {selectedDescription && (
-          <Typography 
-            variant="body1" 
-            color="text.secondary" 
-            sx={{ 
-              mt: 1, 
-              textAlign: 'center',
-              px: 2 
-            }}
-          >
-            {selectedDescription}
-          </Typography>
-        )}
-      </Box>
-    </Box>
-  </Fade>
-</Modal>
+          open={modalOpen}
+          onClose={handleCloseModal}
+          closeAfterTransition
+          slots={{ backdrop: Backdrop }}
+          slotProps={{ backdrop: { timeout: 500 } }}
+        >
+          <Fade in={modalOpen}>
+            <Box
+              sx={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: isMobile ? '90%' : '90%',
+                height: isMobile ? '50%' : '90%',
+                maxWidth: isMobile ? '100vw' : '1200px',
+                maxHeight: isMobile ? '90vh' : '90vh',
+                boxShadow: isMobile ? 0 : 24,
+                outline: 'none',
+                bgcolor: 'background.paper',
+                borderRadius: isMobile ? 0 : 2,
+                overflow: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+                p: isMobile ? 0 : 2,
+              }}
+            >
+              <Box
+                sx={{
+                  flexGrow: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  overflow: 'hidden',
+                }}
+              >
+                <img
+                  src={selectedImage}
+                  alt={selectedTitle}
+                  style={{
+                    maxWidth: '100%',
+                    maxHeight: isMobile ? '100%' : '80vh',
+                    objectFit: 'contain',
+                    display: 'block',
+                    borderRadius: isMobile ? 0 : '8px 8px 0 0',
+                  }}
+                />
+              </Box>
+              <Box sx={{ p: isMobile ? 2 : 3, flexShrink: 0 }}>
+                <Typography variant="h6" sx={{ textAlign: 'center' }}>
+                  {selectedTitle}
+                </Typography>
+                {selectedDescription && (
+                  <Typography
+                    variant="body1"
+                    color="text.secondary"
+                    sx={{
+                      mt: 1,
+                      textAlign: 'center',
+                    }}
+                  >
+                    {selectedDescription}
+                  </Typography>
+                )}
+              </Box>
+            </Box>
+          </Fade>
+        </Modal>
       </Box>
     </Container>
   );
