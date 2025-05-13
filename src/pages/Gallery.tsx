@@ -137,76 +137,84 @@ export default function Gallery() {
             </ImageListItem>
           ))}
         </ImageList>
-
         <Modal
-          open={modalOpen}
-          onClose={handleCloseModal}
-          closeAfterTransition
-          slots={{ backdrop: Backdrop }}
-          slotProps={{ backdrop: { timeout: 500 } }}
-        >
-          <Fade in={modalOpen}>
-            <Box
-              sx={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                width: isMobile ? '95%' : '90%',
-                height: isMobile ? '50%' : '90%',
-                maxWidth: isMobile ? '100vw' : '1200px',
-                maxHeight: isMobile ? '90vh' : '90vh',
-                boxShadow: isMobile ? 0 : 24,
-                outline: 'none',
-                bgcolor: 'background.paper',
-                borderRadius: isMobile ? 0 : 2,
-                overflow: 'auto',
-                display: 'flex',
-                flexDirection: 'column',
-                p: isMobile ? 0 : 2,
-              }}
-            >
-              <Box
-                sx={{
-                  flexGrow: 1,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  overflow: 'hidden',
-                }}
-              >
-                <img
-                  src={selectedImage}
-                  alt={selectedTitle}
-                  style={{
-                    maxWidth: '100%',
-                    maxHeight: isMobile ? '100%' : '80vh',
-                    objectFit: 'contain',
-                    display: 'block',
-                    borderRadius: isMobile ? 0 : '8px 8px 0 0',
-                  }}
-                />
-              </Box>
-              <Box sx={{ p: isMobile ? 2 : 3, flexShrink: 0 }}>
-                <Typography variant="h6" sx={{ textAlign: 'center' }}>
-                  {selectedTitle}
-                </Typography>
-                {selectedDescription && (
-                  <Typography
-                    variant="body1"
-                    color="text.secondary"
-                    sx={{
-                      mt: 1,
-                      textAlign: 'center',
-                    }}
-                  >
-                    {selectedDescription}
-                  </Typography>
-                )}
-              </Box>
-            </Box>
-          </Fade>
-        </Modal>
+  open={modalOpen}
+  onClose={handleCloseModal}
+  closeAfterTransition
+  slots={{ backdrop: Backdrop }}
+  slotProps={{ backdrop: { timeout: 500 } }}
+>
+  <Fade in={modalOpen}>
+    <Box
+      sx={{
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        maxWidth: isMobile ? '95%' : '95%', // Increased from 90% to 95%
+        minWidth: isMobile ? '85%' : '450px', // Added minimum width
+        maxHeight: isMobile ? '95vh' : '95vh', // Increased from 90vh to 95vh
+        bgcolor: 'background.paper',
+        borderRadius: 2,
+        boxShadow: 24,
+        p: 0,
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      {/* Image container with increased dimensions */}
+      <Box
+        sx={{
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          backgroundColor: 'background.paper',
+          padding: 2, // Added some padding around the image
+        }}
+      >
+        <img
+          src={selectedImage}
+          alt={selectedTitle}
+          style={{
+            maxWidth: '100%',
+            maxHeight: isMobile ? '80vh' : '85vh', // Increased from 70vh/80vh
+            minHeight: isMobile ? '250px' : '350px', // Added minimum height
+            width: 'auto',
+            height: 'auto',
+            objectFit: 'contain',
+            display: 'block',
+          }}
+        />
+      </Box>
+      
+      {/* Caption container */}
+      <Box 
+        sx={{ 
+          p: 2, 
+          width: '100%',
+          backgroundColor: 'background.paper',
+        }}
+      >
+        <Typography variant="h6" sx={{ textAlign: 'center' }}>
+          {selectedTitle}
+        </Typography>
+        {selectedDescription && (
+          <Typography
+            variant="body1"
+            color="text.secondary"
+            sx={{
+              mt: 1,
+              textAlign: 'center',
+            }}
+          >
+            {selectedDescription}
+          </Typography>
+        )}
+      </Box>
+    </Box>
+  </Fade>
+</Modal>
       </Box>
     </Container>
   );
