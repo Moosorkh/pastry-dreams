@@ -152,7 +152,7 @@ export default function Gallery() {
                 top: '50%',
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
-                width: isMobile ? '90%' : '90%',
+                width: isMobile ? '95%' : '90%',
                 height: isMobile ? '50%' : '90%',
                 maxWidth: isMobile ? '100vw' : '1200px',
                 maxHeight: isMobile ? '90vh' : '90vh',
