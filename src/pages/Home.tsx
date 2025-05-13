@@ -721,49 +721,53 @@ export default function Home() {
 
             {/* Indicator dots */}
             <Box 
-              sx={{ 
-                display: 'flex', 
-                justifyContent: 'center', 
-                position: 'absolute',
-                bottom: 16,
-                left: 0,
-                right: 0,
-                zIndex: 10
-              }}
-              role="tablist"
-              aria-label="Carousel navigation"
-            >
-              {featuredItems.map((_, index) => (
-                <Box
-                  key={index}
-                  onClick={() => handleDotClick(index)}
-                  role="tab"
-                  tabIndex={0}
-                  aria-selected={activeSlide === index}
-                  aria-label={`Go to slide ${index + 1}`}
-                  sx={{
-                    width: 12,
-                    height: 12,
-                    borderRadius: '50%',
-                    mx: 0.5,
-                    bgcolor: index === activeSlide ? 'primary.main' : 'rgba(255,255,255,0.7)',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    transform: index === activeSlide ? 'scale(1.2)' : 'scale(1)',
-                    '&:hover': {
-                      transform: 'scale(1.2)',
-                      bgcolor: index === activeSlide ? 'primary.main' : 'rgba(255,255,255,0.9)',
-                    },
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      handleDotClick(index);
-                      e.preventDefault();
-                    }
-                  }}
-                />
-              ))}
-            </Box>
+  sx={{ 
+    display: 'flex', 
+    justifyContent: 'center', 
+    position: 'absolute',
+    bottom: { xs: -9, md: 16 }, // Move below the card on mobile
+    left: 0,
+    right: 0,
+    zIndex: 10,
+    py: 2 // Add padding for better touch target
+  }}
+  role="tablist"
+  aria-label="Carousel navigation"
+>
+  {featuredItems.map((_, index) => (
+    <Box
+      key={index}
+      onClick={() => handleDotClick(index)}
+      role="tab"
+      tabIndex={0}
+      aria-selected={activeSlide === index}
+      aria-label={`Go to slide ${index + 1}`}
+      sx={{
+        width: { xs: 10, md: 12 }, // Smaller on mobile
+        height: { xs: 10, md: 12 },
+        borderRadius: '50%',
+        mx: 0.5,
+        // Use a more visible color scheme
+        bgcolor: index === activeSlide ? 'primary.main' : 'rgba(0,0,0,0.2)',
+        border: '1px solid',
+        borderColor: index === activeSlide ? 'primary.main' : 'rgba(0,0,0,0.1)',
+        cursor: 'pointer',
+        transition: 'all 0.3s ease',
+        transform: index === activeSlide ? 'scale(1.2)' : 'scale(1)',
+        '&:hover': {
+          transform: 'scale(1.2)',
+          bgcolor: index === activeSlide ? 'primary.main' : 'rgba(0,0,0,0.3)',
+        },
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          handleDotClick(index);
+          e.preventDefault();
+        }
+      }}
+    />
+  ))}
+</Box>
           </Box>
 
           <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
