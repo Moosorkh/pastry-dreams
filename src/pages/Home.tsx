@@ -132,11 +132,19 @@ export default function Home() {
   const [slideDirection, setSlideDirection] = useState('left');
   const [isTransitioning, setIsTransitioning] = useState(false);
   
+  // Touch event states for swipeable carousel
+  const [touchStart, setTouchStart] = useState<number>(0);
+  const [touchEnd, setTouchEnd] = useState<number>(0);
+  const [swipeProgress, setSwipeProgress] = useState<number>(0);
+  
   const aboutSectionRef = useRef<HTMLDivElement>(null);
   const journeySectionRef = useRef<HTMLDivElement>(null);
   const skillsSectionRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
+
+  // Define minimum swipe distance (in pixels)
+  const minSwipeDistance = 50;
 
   useEffect(() => {
     if (location.hash === '#journey') {
@@ -194,9 +202,46 @@ export default function Home() {
     }, 500);
   };
 
+  // Touch handlers for swipeable carousel
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    const currentX = e.targetTouches[0].clientX;
+    setTouchEnd(currentX);
+    
+    // Calculate swipe progress as a percentage for visual feedback
+    if (touchStart) {
+      const diff = touchStart - currentX;
+      // Limit the progress to between -25 and 25 percent
+      const progress = Math.max(-25, Math.min(25, (diff / window.innerWidth) * 100));
+      setSwipeProgress(progress);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    
+    if (isLeftSwipe && !isTransitioning) {
+      handleNextSlide();
+    } else if (isRightSwipe && !isTransitioning) {
+      handlePrevSlide();
+    }
+    
+    // Reset all touch values
+    setTouchEnd(0);
+    setTouchStart(0);
+    setSwipeProgress(0);
+  };
+
   // Keyboard navigation for carousel
   useEffect(() => {
-    const handleKeyDown = (e: { key: string; }) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (carouselRef.current && carouselRef.current.contains(document.activeElement)) {
         if (e.key === 'ArrowLeft') {
           handlePrevSlide();
@@ -472,7 +517,7 @@ export default function Home() {
         </Container>
       </Box>
 
-      {/* Featured Creations Carousel - IMPROVED */}
+      {/* Featured Creations Carousel - IMPROVED with swipe */}
       <Box sx={{ py: 8 }}>
         <Container maxWidth="lg">
           <Typography 
@@ -500,7 +545,7 @@ export default function Home() {
             Featured Creations
           </Typography>
           
-          {/* Improved carousel with smooth transitions */}
+          {/* Improved carousel with swipe functionality */}
           <Box 
             sx={{ 
               position: 'relative', 
@@ -509,11 +554,18 @@ export default function Home() {
               borderRadius: 2,
               boxShadow: 3,
               overflow: 'hidden',
+              cursor: 'grab',
+              '&:active': {
+                cursor: 'grabbing'
+              }
             }}
             ref={carouselRef}
             tabIndex={0}
             aria-label="Featured creations carousel"
             role="region"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
           >
             {featuredItems.map((item, index) => (
               <Box
@@ -529,7 +581,7 @@ export default function Home() {
                   opacity: activeSlide === index ? 1 : 0,
                   transform: `translateX(${
                     activeSlide === index 
-                      ? '0%' 
+                      ? `${swipeProgress}%` // Apply swipe progress when active
                       : prevSlide === index && slideDirection === 'left'
                         ? '-100%'
                         : prevSlide === index && slideDirection === 'right'
@@ -538,7 +590,11 @@ export default function Home() {
                             ? '100%'
                             : '-100%'
                   })`,
-                  transition: 'transform 0.5s ease, opacity 0.5s ease',
+                  transition: isTransitioning 
+                    ? 'transform 0.5s ease, opacity 0.5s ease' 
+                    : swipeProgress !== 0 
+                      ? 'transform 0.1s ease' 
+                      : 'none',
                   zIndex: activeSlide === index ? 2 : 1,
                   overflow: 'hidden',
                   backgroundColor: 'background.paper',
@@ -597,6 +653,27 @@ export default function Home() {
                 </Grid>
               </Box>
             ))}
+
+            {/* Swipe indicator */}
+            {swipeProgress !== 0 && (
+              <Box
+                sx={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: swipeProgress > 0 ? 20 : 'auto',
+                  right: swipeProgress < 0 ? 20 : 'auto',
+                  transform: 'translateY(-50%)',
+                  bgcolor: 'rgba(0,0,0,0.3)',
+                  color: 'white',
+                  borderRadius: '50%',
+                  p: 1,
+                  zIndex: 10,
+                  opacity: Math.abs(swipeProgress) / 25,
+                }}
+              >
+                {swipeProgress > 0 ? <KeyboardArrowLeftIcon fontSize="large" /> : <KeyboardArrowRightIcon fontSize="large" />}
+              </Box>
+            )}
 
             {/* Navigation arrows */}
             <IconButton
