@@ -246,14 +246,16 @@ export const galleryItems: GalleryItem[] = [
     src: assortedPastries, 
     alt: 'Assorted Pastries', 
     category: 'Breads',
-    featured: false 
+    featured: false,
+    description: 'A selection of flaky pastries including Donuts and Cinnamon rolls.'
   },
   { 
     id: '4', 
     src: birthDayCake, 
     alt: 'Birthday Cake', 
     category: 'Cakes',
-    featured: false 
+    featured: false,
+    description: 'A decadent chocolate drip cake adorned with rich rosette piping and elegant golden "Happy 80th" toppers, perfect for celebrating a milestone birthday in style.'
   },
   { 
     id: '5', 
