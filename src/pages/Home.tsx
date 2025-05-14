@@ -16,6 +16,7 @@ import {
   Fab,
   Modal,
   Backdrop,
+  useMediaQuery,
 } from '@mui/material';
 import Timeline from '@mui/lab/Timeline';
 import TimelineItem from '@mui/lab/TimelineItem';
@@ -41,6 +42,9 @@ import {
 import { galleryItems } from '../data/mockData';
 import bannerImage from '../../public/banner-image.png';
 import maryProfileImage from '../assets/mary-kitchen.png';
+import theme from '../theme';
+
+
 
 // Core skills from resume
 const coreSkills = [
@@ -146,6 +150,7 @@ export default function Home() {
   const carouselRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
   const [profileModalOpen, setProfileModalOpen] = useState(false);
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   // Add these handler functions
   const handleOpenProfileModal = () => {
@@ -454,78 +459,79 @@ export default function Home() {
               }}
             />
             {/* Profile Image Modal */}
-<Modal
-  open={profileModalOpen}
-  onClose={handleCloseProfileModal}
-  closeAfterTransition
-  slots={{ backdrop: Backdrop }}
-  slotProps={{ backdrop: { timeout: 500 } }}
->
-  <Fade in={profileModalOpen}>
-    <Box
-      sx={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        maxWidth: '90%',
-        maxHeight: '90vh',
-        bgcolor: 'background.paper',
-        borderRadius: 2,
-        boxShadow: 24,
-        p: 2,
-        outline: 'none',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}
-    >
-      <Box
-        sx={{
-          position: 'relative',
-          width: '100%',
-          mb: 2,
-          display: 'flex',
-          justifyContent: 'flex-end',
-        }}
-      >
-        <IconButton
-          onClick={handleCloseProfileModal}
-          aria-label="close"
-          size="small"
-          sx={{
-            position: 'absolute',
-            top: -10,
-            right: -10,
-            bgcolor: 'rgba(0,0,0,0.05)',
-            '&:hover': {
-              bgcolor: 'rgba(0,0,0,0.1)',
-            },
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-      </Box>
-      <Box
-        component="img"
-        src={maryProfileImage}
-        alt="Mary Karimzadeh - Pastry Chef"
-        sx={{
-          maxWidth: '100%',
-          maxHeight: 'calc(90vh - 60px)',
-          borderRadius: 1,
-          boxShadow: 2,
-        }}
-      />
-      <Typography variant="h6" sx={{ mt: 2, fontFamily: 'Playfair Display' }}>
-        Mary Karimzadeh
-      </Typography>
-      <Typography variant="body2" color="text.secondary">
-        Pastry Chef & Cake Decorator
-      </Typography>
-    </Box>
-  </Fade>
-</Modal>
+            <Modal
+              open={profileModalOpen}
+              onClose={handleCloseProfileModal}
+              closeAfterTransition
+              slots={{ backdrop: Backdrop }}
+              slotProps={{ backdrop: { timeout: 500 } }}
+            >
+              <Fade in={profileModalOpen}>
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: isMobile ? '95%' : '70%',
+                    maxWidth: isMobile ? '100%' : '600px',
+                    maxHeight: isMobile ? '95vh' : '80vh',
+                    bgcolor: 'background.paper',
+                    borderRadius: 2,
+                    boxShadow: 24,
+                    p: 2,
+                    outline: 'none',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Box
+                    sx={{
+                      position: 'relative',
+                      width: '100%',
+                      mb: 2,
+                      display: 'flex',
+                      justifyContent: 'flex-end',
+                    }}
+                  >
+                    <IconButton
+                      onClick={handleCloseProfileModal}
+                      aria-label="close"
+                      size="small"
+                      sx={{
+                        position: 'absolute',
+                        top: -10,
+                        right: -10,
+                        bgcolor: 'rgba(0,0,0,0.05)',
+                        '&:hover': {
+                          bgcolor: 'rgba(0,0,0,0.1)',
+                        },
+                      }}
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                  </Box>
+                  <Box
+                    component="img"
+                    src={maryProfileImage}
+                    alt="Mary Karimzadeh - Pastry Chef"
+                    sx={{
+                      maxWidth: '100%',
+                      maxHeight: isMobile? 'calc(90vh - 60px)': 'calc(60vh - 60px)',
+                      borderRadius: 1,
+                      boxShadow: 2,
+                    }}
+                  />
+                  <Typography variant="h6" sx={{ mt: 2, fontFamily: 'Playfair Display' }}>
+                    Mary Karimzadeh
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Pastry Chef & Cake Decorator
+                  </Typography>
+                </Box>
+              </Fade>
+            </Modal>
           </Grid>
         </Grid>
       </Container>
@@ -672,14 +678,14 @@ export default function Home() {
                   height: '100%',
                   opacity: activeSlide === index ? 1 : 0,
                   transform: `translateX(${activeSlide === index
-                      ? `${swipeProgress}%` // Apply swipe progress when active
-                      : prevSlide === index && slideDirection === 'left'
-                        ? '-100%'
-                        : prevSlide === index && slideDirection === 'right'
+                    ? `${swipeProgress}%` // Apply swipe progress when active
+                    : prevSlide === index && slideDirection === 'left'
+                      ? '-100%'
+                      : prevSlide === index && slideDirection === 'right'
+                        ? '100%'
+                        : slideDirection === 'left'
                           ? '100%'
-                          : slideDirection === 'left'
-                            ? '100%'
-                            : '-100%'
+                          : '-100%'
                     })`,
                   transition: isTransitioning
                     ? 'transform 0.5s ease, opacity 0.5s ease'
