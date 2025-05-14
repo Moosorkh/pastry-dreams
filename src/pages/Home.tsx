@@ -14,6 +14,8 @@ import {
   useScrollTrigger,
   Zoom,
   Fab,
+  Modal,
+  Backdrop,
 } from '@mui/material';
 import Timeline from '@mui/lab/Timeline';
 import TimelineItem from '@mui/lab/TimelineItem';
@@ -21,6 +23,7 @@ import TimelineSeparator from '@mui/lab/TimelineSeparator';
 import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
+import { Close as CloseIcon } from '@mui/icons-material';
 import {
   School as SchoolIcon,
   Restaurant as RestaurantIcon,
@@ -41,23 +44,23 @@ import maryProfileImage from '../assets/mary-kitchen.png';
 
 // Core skills from resume
 const coreSkills = [
-  { 
-    title: 'Cake Decoration', 
+  {
+    title: 'Cake Decoration',
     description: 'Expert in decorating cakes for special occasions with creative and personalized designs.',
     icon: <CakeIcon color="primary" fontSize="large" />
   },
-  { 
-    title: 'Pastry Preparation', 
+  {
+    title: 'Pastry Preparation',
     description: 'Skilled in preparing a wide variety of pastries from scratch using traditional techniques.',
     icon: <KitchenIcon color="primary" fontSize="large" />
   },
-  { 
-    title: 'Event Planning', 
+  {
+    title: 'Event Planning',
     description: 'Experience in planning and preparing desserts for special events like weddings and celebrations.',
     icon: <CelebrationIcon color="primary" fontSize="large" />
   },
-  { 
-    title: 'Bread Making', 
+  {
+    title: 'Bread Making',
     description: 'Expertise in creating artisanal breads and Italian doughs with authentic techniques.',
     icon: <RestaurantIcon color="primary" fontSize="large" />
   },
@@ -131,17 +134,27 @@ export default function Home() {
   const [prevSlide, setPrevSlide] = useState(0);
   const [slideDirection, setSlideDirection] = useState('left');
   const [isTransitioning, setIsTransitioning] = useState(false);
-  
+
   // Touch event states for swipeable carousel
   const [touchStart, setTouchStart] = useState<number>(0);
   const [touchEnd, setTouchEnd] = useState<number>(0);
   const [swipeProgress, setSwipeProgress] = useState<number>(0);
-  
+
   const aboutSectionRef = useRef<HTMLDivElement>(null);
   const journeySectionRef = useRef<HTMLDivElement>(null);
   const skillsSectionRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
+  const [profileModalOpen, setProfileModalOpen] = useState(false);
+
+  // Add these handler functions
+  const handleOpenProfileModal = () => {
+    setProfileModalOpen(true);
+  };
+
+  const handleCloseProfileModal = () => {
+    setProfileModalOpen(false);
+  };
 
   // Define minimum swipe distance (in pixels)
   const minSwipeDistance = 50;
@@ -162,12 +175,12 @@ export default function Home() {
 
   const handleNextSlide = () => {
     if (isTransitioning) return;
-    
+
     setIsTransitioning(true);
     setPrevSlide(activeSlide);
     setSlideDirection('left');
     setActiveSlide((prev) => (prev === featuredItems.length - 1 ? 0 : prev + 1));
-    
+
     // Reset transitioning state after animation completes
     setTimeout(() => {
       setIsTransitioning(false);
@@ -176,12 +189,12 @@ export default function Home() {
 
   const handlePrevSlide = () => {
     if (isTransitioning) return;
-    
+
     setIsTransitioning(true);
     setPrevSlide(activeSlide);
     setSlideDirection('right');
     setActiveSlide((prev) => (prev === 0 ? featuredItems.length - 1 : prev - 1));
-    
+
     // Reset transitioning state after animation completes
     setTimeout(() => {
       setIsTransitioning(false);
@@ -190,12 +203,12 @@ export default function Home() {
 
   const handleDotClick = (index: number) => {
     if (isTransitioning || index === activeSlide) return;
-    
+
     setIsTransitioning(true);
     setPrevSlide(activeSlide);
     setSlideDirection(index > activeSlide ? 'left' : 'right');
     setActiveSlide(index);
-    
+
     // Reset transitioning state after animation completes
     setTimeout(() => {
       setIsTransitioning(false);
@@ -210,7 +223,7 @@ export default function Home() {
   const handleTouchMove = (e: React.TouchEvent) => {
     const currentX = e.targetTouches[0].clientX;
     setTouchEnd(currentX);
-    
+
     // Calculate swipe progress as a percentage for visual feedback
     if (touchStart) {
       const diff = touchStart - currentX;
@@ -222,17 +235,17 @@ export default function Home() {
 
   const handleTouchEnd = () => {
     if (!touchStart || !touchEnd) return;
-    
+
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > minSwipeDistance;
     const isRightSwipe = distance < -minSwipeDistance;
-    
+
     if (isLeftSwipe && !isTransitioning) {
       handleNextSlide();
     } else if (isRightSwipe && !isTransitioning) {
       handlePrevSlide();
     }
-    
+
     // Reset all touch values
     setTouchEnd(0);
     setTouchStart(0);
@@ -271,46 +284,46 @@ export default function Home() {
   return (
     <Box>
       {/* Hero Section */}
-      <Paper 
-        elevation={3} 
-        sx={{ 
-          position: 'relative', 
-          backgroundImage: `url(${bannerImage})`, 
-          backgroundSize: 'cover', 
-          backgroundPosition: 'center', 
-          color: 'white', 
+      <Paper
+        elevation={3}
+        sx={{
+          position: 'relative',
+          backgroundImage: `url(${bannerImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          color: 'white',
           py: { xs: 6, md: 8 },
           height: { xs: 'auto', md: '450px' },
           display: 'flex',
           alignItems: 'center'
         }}
       >
-        <Box 
-          sx={{ 
-            position: 'absolute', 
-            top: 0, 
-            left: 0, 
-            right: 0, 
-            bottom: 0, 
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
             bgcolor: 'rgba(0,0,0,0.35)'
-          }} 
+          }}
         />
         <Container maxWidth="xl" sx={{ position: 'relative', zIndex: 1 }}>
           <Box sx={{ maxWidth: { xs: '100%', md: '600px' } }}>
-            <Typography 
-              variant="h2" 
-              sx={{ 
+            <Typography
+              variant="h2"
+              sx={{
                 fontWeight: 'bold',
-                fontFamily: 'Playfair Display', 
+                fontFamily: 'Playfair Display',
                 textShadow: '1px 1px 4px rgba(0,0,0,0.5)',
                 fontSize: { xs: '2.5rem', md: '3.5rem' }
               }}
             >
               Mary Karimzadeh
             </Typography>
-            <Typography 
-              variant="h5" 
-              sx={{ 
+            <Typography
+              variant="h5"
+              sx={{
                 mb: 3,
                 textShadow: '1px 1px 3px rgba(0,0,0,0.4)',
                 fontWeight: 500
@@ -318,12 +331,12 @@ export default function Home() {
             >
               Award-Winning Pastry Cook | Custom Cakes & Artisan Pastries
             </Typography>
-            <Button 
-              variant="contained" 
-              size="large" 
-              component={RouterLink} 
-              to="/gallery" 
-              sx={{ 
+            <Button
+              variant="contained"
+              size="large"
+              component={RouterLink}
+              to="/gallery"
+              sx={{
                 mr: 2,
                 borderRadius: 2,
                 px: 3,
@@ -339,12 +352,12 @@ export default function Home() {
             >
               View Gallery
             </Button>
-            <Button 
-              variant="outlined" 
-              size="large" 
-              component={RouterLink} 
+            <Button
+              variant="outlined"
+              size="large"
+              component={RouterLink}
               to="/contact"
-              sx={{ 
+              sx={{
                 borderRadius: 2,
                 px: 3,
                 py: 1,
@@ -370,10 +383,10 @@ export default function Home() {
       <Container maxWidth="lg" sx={{ my: 8 }} ref={aboutSectionRef}>
         <Grid container spacing={6} alignItems="center">
           <Grid item xs={12} md={6}>
-            <Typography 
-              variant="h4" 
+            <Typography
+              variant="h4"
               gutterBottom
-              sx={{ 
+              sx={{
                 fontFamily: 'Playfair Display',
                 fontWeight: 600,
                 position: 'relative',
@@ -390,9 +403,9 @@ export default function Home() {
             >
               About Mary
             </Typography>
-            <Typography 
-              variant="subtitle1" 
-              color="primary" 
+            <Typography
+              variant="subtitle1"
+              color="primary"
               sx={{ mb: 2, fontWeight: 500 }}
             >
               Passionate Pastry Cook with Over 5 Years of Experience
@@ -404,13 +417,13 @@ export default function Home() {
               After earning a Professional Pastry Diploma at Culinary Lab Cooking School in Tustin, Mary honed her skills working in prestigious establishments including North Italia and currently at Lido House in Newport Beach. Her outgoing personality and drive for excellence, combined with meticulous attention to detail, define her approach to pastry arts.
             </Typography>
             <Box sx={{ mt: 3 }}>
-              <Button 
-                variant="outlined" 
-                color="primary" 
+              <Button
+                variant="outlined"
+                color="primary"
                 endIcon={<KeyboardArrowRightIcon />}
                 component={RouterLink}
                 to="/contact"
-                sx={{ 
+                sx={{
                   borderRadius: 28,
                   px: 3,
                   '&:hover': {
@@ -424,16 +437,95 @@ export default function Home() {
             </Box>
           </Grid>
           <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'center' }}>
-            <Avatar 
-              src={maryProfileImage} 
+            <Avatar
+              src={maryProfileImage}
               alt="Mary Karimzadeh"
+              onClick={handleOpenProfileModal}
               sx={{
                 width: { xs: 280, md: 320 },
                 height: { xs: 280, md: 320 },
                 boxShadow: 4,
                 border: '4px solid white',
+                cursor: 'pointer', // Add cursor pointer to indicate it's clickable
+                transition: 'transform 0.2s ease',
+                '&:hover': {
+                  transform: 'scale(1.02)', // Subtle scale effect on hover
+                },
               }}
             />
+            {/* Profile Image Modal */}
+<Modal
+  open={profileModalOpen}
+  onClose={handleCloseProfileModal}
+  closeAfterTransition
+  slots={{ backdrop: Backdrop }}
+  slotProps={{ backdrop: { timeout: 500 } }}
+>
+  <Fade in={profileModalOpen}>
+    <Box
+      sx={{
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        maxWidth: '90%',
+        maxHeight: '90vh',
+        bgcolor: 'background.paper',
+        borderRadius: 2,
+        boxShadow: 24,
+        p: 2,
+        outline: 'none',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+    >
+      <Box
+        sx={{
+          position: 'relative',
+          width: '100%',
+          mb: 2,
+          display: 'flex',
+          justifyContent: 'flex-end',
+        }}
+      >
+        <IconButton
+          onClick={handleCloseProfileModal}
+          aria-label="close"
+          size="small"
+          sx={{
+            position: 'absolute',
+            top: -10,
+            right: -10,
+            bgcolor: 'rgba(0,0,0,0.05)',
+            '&:hover': {
+              bgcolor: 'rgba(0,0,0,0.1)',
+            },
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+      </Box>
+      <Box
+        component="img"
+        src={maryProfileImage}
+        alt="Mary Karimzadeh - Pastry Chef"
+        sx={{
+          maxWidth: '100%',
+          maxHeight: 'calc(90vh - 60px)',
+          borderRadius: 1,
+          boxShadow: 2,
+        }}
+      />
+      <Typography variant="h6" sx={{ mt: 2, fontFamily: 'Playfair Display' }}>
+        Mary Karimzadeh
+      </Typography>
+      <Typography variant="body2" color="text.secondary">
+        Pastry Chef & Cake Decorator
+      </Typography>
+    </Box>
+  </Fade>
+</Modal>
           </Grid>
         </Grid>
       </Container>
@@ -441,10 +533,10 @@ export default function Home() {
       {/* Core Skills Section */}
       <Box sx={{ bgcolor: 'grey.50', py: 8 }} ref={skillsSectionRef}>
         <Container maxWidth="lg">
-          <Typography 
-            variant="h4" 
-            align="center" 
-            sx={{ 
+          <Typography
+            variant="h4"
+            align="center"
+            sx={{
               mb: 5,
               fontFamily: 'Playfair Display',
               fontWeight: 600,
@@ -469,12 +561,12 @@ export default function Home() {
             {coreSkills.map((skill, index) => (
               <Grid item xs={12} sm={6} md={3} key={index}>
                 <Fade in={true} style={{ transitionDelay: `${index * 100}ms` }}>
-                  <Paper 
-                    elevation={2} 
-                    sx={{ 
-                      p: 3, 
-                      height: '100%', 
-                      display: 'flex', 
+                  <Paper
+                    elevation={2}
+                    sx={{
+                      p: 3,
+                      height: '100%',
+                      display: 'flex',
                       flexDirection: 'column',
                       alignItems: 'center',
                       textAlign: 'center',
@@ -485,11 +577,11 @@ export default function Home() {
                       },
                     }}
                   >
-                    <Box 
-                      sx={{ 
-                        mb: 2, 
-                        p: 1.5, 
-                        borderRadius: '50%', 
+                    <Box
+                      sx={{
+                        mb: 2,
+                        p: 1.5,
+                        borderRadius: '50%',
                         bgcolor: 'primary.light',
                         color: 'primary.main',
                         display: 'flex',
@@ -499,8 +591,8 @@ export default function Home() {
                     >
                       {skill.icon}
                     </Box>
-                    <Typography 
-                      variant="h6" 
+                    <Typography
+                      variant="h6"
                       gutterBottom
                       sx={{ fontWeight: 600 }}
                     >
@@ -520,10 +612,10 @@ export default function Home() {
       {/* Featured Creations Carousel - IMPROVED with swipe */}
       <Box sx={{ py: 8 }}>
         <Container maxWidth="lg">
-          <Typography 
-            variant="h4" 
-            align="center" 
-            sx={{ 
+          <Typography
+            variant="h4"
+            align="center"
+            sx={{
               mb: 5,
               fontFamily: 'Playfair Display',
               fontWeight: 600,
@@ -544,12 +636,12 @@ export default function Home() {
           >
             Featured Creations
           </Typography>
-          
+
           {/* Improved carousel with swipe functionality */}
-          <Box 
-            sx={{ 
-              position: 'relative', 
-              mb: 6, 
+          <Box
+            sx={{
+              position: 'relative',
+              mb: 6,
               height: { xs: '550px', md: '400px' },
               borderRadius: 2,
               boxShadow: 3,
@@ -579,8 +671,7 @@ export default function Home() {
                   width: '100%',
                   height: '100%',
                   opacity: activeSlide === index ? 1 : 0,
-                  transform: `translateX(${
-                    activeSlide === index 
+                  transform: `translateX(${activeSlide === index
                       ? `${swipeProgress}%` // Apply swipe progress when active
                       : prevSlide === index && slideDirection === 'left'
                         ? '-100%'
@@ -589,11 +680,11 @@ export default function Home() {
                           : slideDirection === 'left'
                             ? '100%'
                             : '-100%'
-                  })`,
-                  transition: isTransitioning 
-                    ? 'transform 0.5s ease, opacity 0.5s ease' 
-                    : swipeProgress !== 0 
-                      ? 'transform 0.1s ease' 
+                    })`,
+                  transition: isTransitioning
+                    ? 'transform 0.5s ease, opacity 0.5s ease'
+                    : swipeProgress !== 0
+                      ? 'transform 0.1s ease'
                       : 'none',
                   zIndex: activeSlide === index ? 2 : 1,
                   overflow: 'hidden',
@@ -614,11 +705,11 @@ export default function Home() {
                     />
                   </Grid>
                   <Grid item xs={12} md={4}>
-                    <Box sx={{ 
-                      p: { xs: 2, md: 4 }, 
-                      height: '100%', 
-                      display: 'flex', 
-                      flexDirection: 'column' 
+                    <Box sx={{
+                      p: { xs: 2, md: 4 },
+                      height: '100%',
+                      display: 'flex',
+                      flexDirection: 'column'
                     }}>
                       <Chip
                         label={item.category}
@@ -629,8 +720,8 @@ export default function Home() {
                       <Typography
                         variant="h4"
                         gutterBottom
-                        sx={{ 
-                          fontFamily: 'Playfair Display', 
+                        sx={{
+                          fontFamily: 'Playfair Display',
                           fontWeight: 500,
                           fontSize: { xs: '1.5rem', md: '2rem' }
                         }}
@@ -685,7 +776,7 @@ export default function Home() {
                 transform: 'translateY(-50%)',
                 bgcolor: 'rgba(0,0,0,0.5)',
                 color: 'white',
-                '&:hover': { 
+                '&:hover': {
                   bgcolor: 'rgba(0,0,0,0.7)',
                   transform: 'translateY(-50%) scale(1.1)'
                 },
@@ -706,7 +797,7 @@ export default function Home() {
                 transform: 'translateY(-50%)',
                 bgcolor: 'rgba(0,0,0,0.5)',
                 color: 'white',
-                '&:hover': { 
+                '&:hover': {
                   bgcolor: 'rgba(0,0,0,0.7)',
                   transform: 'translateY(-50%) scale(1.1)'
                 },
@@ -720,64 +811,64 @@ export default function Home() {
             </IconButton>
 
             {/* Indicator dots */}
-            <Box 
-  sx={{ 
-    display: 'flex', 
-    justifyContent: 'center', 
-    position: 'absolute',
-    bottom: { xs: -9, md: 16 }, // Move below the card on mobile
-    left: 0,
-    right: 0,
-    zIndex: 10,
-    py: 2 // Add padding for better touch target
-  }}
-  role="tablist"
-  aria-label="Carousel navigation"
->
-  {featuredItems.map((_, index) => (
-    <Box
-      key={index}
-      onClick={() => handleDotClick(index)}
-      role="tab"
-      tabIndex={0}
-      aria-selected={activeSlide === index}
-      aria-label={`Go to slide ${index + 1}`}
-      sx={{
-        width: { xs: 10, md: 12 }, // Smaller on mobile
-        height: { xs: 10, md: 12 },
-        borderRadius: '50%',
-        mx: 0.5,
-        // Use a more visible color scheme
-        bgcolor: index === activeSlide ? 'primary.main' : 'rgba(0,0,0,0.2)',
-        border: '1px solid',
-        borderColor: index === activeSlide ? 'primary.main' : 'rgba(0,0,0,0.1)',
-        cursor: 'pointer',
-        transition: 'all 0.3s ease',
-        transform: index === activeSlide ? 'scale(1.2)' : 'scale(1)',
-        '&:hover': {
-          transform: 'scale(1.2)',
-          bgcolor: index === activeSlide ? 'primary.main' : 'rgba(0,0,0,0.3)',
-        },
-      }}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          handleDotClick(index);
-          e.preventDefault();
-        }
-      }}
-    />
-  ))}
-</Box>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                position: 'absolute',
+                bottom: { xs: -9, md: 16 }, // Move below the card on mobile
+                left: 0,
+                right: 0,
+                zIndex: 10,
+                py: 2 // Add padding for better touch target
+              }}
+              role="tablist"
+              aria-label="Carousel navigation"
+            >
+              {featuredItems.map((_, index) => (
+                <Box
+                  key={index}
+                  onClick={() => handleDotClick(index)}
+                  role="tab"
+                  tabIndex={0}
+                  aria-selected={activeSlide === index}
+                  aria-label={`Go to slide ${index + 1}`}
+                  sx={{
+                    width: { xs: 10, md: 12 }, // Smaller on mobile
+                    height: { xs: 10, md: 12 },
+                    borderRadius: '50%',
+                    mx: 0.5,
+                    // Use a more visible color scheme
+                    bgcolor: index === activeSlide ? 'primary.main' : 'rgba(0,0,0,0.2)',
+                    border: '1px solid',
+                    borderColor: index === activeSlide ? 'primary.main' : 'rgba(0,0,0,0.1)',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    transform: index === activeSlide ? 'scale(1.2)' : 'scale(1)',
+                    '&:hover': {
+                      transform: 'scale(1.2)',
+                      bgcolor: index === activeSlide ? 'primary.main' : 'rgba(0,0,0,0.3)',
+                    },
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      handleDotClick(index);
+                      e.preventDefault();
+                    }
+                  }}
+                />
+              ))}
+            </Box>
           </Box>
 
           <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-            <Button 
-              variant="contained" 
-              component={RouterLink} 
-              to="/gallery" 
+            <Button
+              variant="contained"
+              component={RouterLink}
+              to="/gallery"
               size="large"
               endIcon={<KeyboardArrowRightIcon />}
-              sx={{ 
+              sx={{
                 px: 3,
                 borderRadius: 28,
                 boxShadow: 2,
@@ -797,10 +888,10 @@ export default function Home() {
       {/* Journey Timeline */}
       <Box sx={{ bgcolor: 'grey.50', py: 8 }} ref={journeySectionRef}>
         <Container maxWidth="lg">
-          <Typography 
-            variant="h4" 
-            align="center" 
-            sx={{ 
+          <Typography
+            variant="h4"
+            align="center"
+            sx={{
               mb: 5,
               fontFamily: 'Playfair Display',
               fontWeight: 600,
@@ -821,17 +912,17 @@ export default function Home() {
           >
             Professional Journey
           </Typography>
-          
+
           <Box sx={{ mb: 3 }}>
-            <Typography 
-              variant="body1" 
-              align="center" 
+            <Typography
+              variant="body1"
+              align="center"
               sx={{ maxWidth: 700, mx: 'auto' }}
             >
               With over 5 years of experience in pastry arts, my career path has taken me from custom cake decoration to leading pastry operations at premier establishments.
             </Typography>
           </Box>
-          
+
           <Timeline position="alternate">
             {displayedAchievements.map((achievement, index) => (
               <TimelineItem key={index}>
@@ -842,10 +933,10 @@ export default function Home() {
                   {index < displayedAchievements.length - 1 && <TimelineConnector />}
                 </TimelineSeparator>
                 <TimelineContent>
-                  <Paper 
-                    elevation={2} 
-                    sx={{ 
-                      p: 3, 
+                  <Paper
+                    elevation={2}
+                    sx={{
+                      p: 3,
                       borderRadius: 2,
                       transition: 'transform 0.2s ease, box-shadow 0.2s ease',
                       '&:hover': {
@@ -854,15 +945,15 @@ export default function Home() {
                       },
                     }}
                   >
-                    <Typography 
-                      variant="h6" 
+                    <Typography
+                      variant="h6"
                       component="h3"
                       sx={{ fontWeight: 600 }}
                     >
                       {achievement.title}
                     </Typography>
-                    <Typography 
-                      color="primary" 
+                    <Typography
+                      color="primary"
                       gutterBottom
                       sx={{ fontWeight: 500 }}
                     >
@@ -876,14 +967,14 @@ export default function Home() {
               </TimelineItem>
             ))}
           </Timeline>
-          
+
           <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-            <Button 
-              variant="outlined" 
+            <Button
+              variant="outlined"
               color="primary"
               onClick={() => setShowFullJourney(!showFullJourney)}
               startIcon={showFullJourney ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-              sx={{ 
+              sx={{
                 px: 3,
                 borderRadius: 28,
                 '&:hover': {
@@ -901,31 +992,31 @@ export default function Home() {
       {/* Call to Action */}
       <Box sx={{ py: 8, textAlign: 'center' }}>
         <Container maxWidth="md">
-          <Typography 
-            variant="h4" 
+          <Typography
+            variant="h4"
             gutterBottom
-            sx={{ 
+            sx={{
               fontFamily: 'Playfair Display',
               fontWeight: 600,
             }}
           >
             Ready to Create Something Sweet?
           </Typography>
-          <Typography 
-            variant="h6" 
-            color="text.secondary" 
+          <Typography
+            variant="h6"
+            color="text.secondary"
             paragraph
             sx={{ mb: 4 }}
           >
             Whether you're planning a special event or need a custom cake, I'm here to bring your sweet dreams to life.
           </Typography>
-          <Button 
-            variant="contained" 
-            color="primary" 
-            size="large" 
-            component={RouterLink} 
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            component={RouterLink}
             to="/contact"
-            sx={{ 
+            sx={{
               px: 4,
               py: 1.5,
               borderRadius: 28,
