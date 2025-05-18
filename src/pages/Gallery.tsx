@@ -137,7 +137,7 @@ export default function Gallery() {
             </ImageListItem>
           ))}
         </ImageList>
-        <Modal
+<Modal
   open={modalOpen}
   onClose={handleCloseModal}
   closeAfterTransition
@@ -151,61 +151,60 @@ export default function Gallery() {
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        maxWidth: isMobile ? '95%' : '95%', // Increased from 90% to 95%
-        minWidth: isMobile ? '85%' : '450px', // Added minimum width
-        maxHeight: isMobile ? '95vh' : '95vh', // Increased from 90vh to 95vh
         bgcolor: 'background.paper',
         borderRadius: 2,
         boxShadow: 24,
-        p: 0,
-        overflow: 'hidden',
+        overflow: 'hidden', // Change from 'auto' to 'hidden'
+        width: 'min(90vw, 600px)', // Set specific width constraints
+        maxHeight: '90vh',
         display: 'flex',
         flexDirection: 'column',
+        p: 2,
       }}
     >
-      {/* Image container with increased dimensions */}
-      <Box
-        sx={{
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          backgroundColor: 'background.paper',
-          padding: 2, // Added some padding around the image
-        }}
-      >
+      <Box sx={{ 
+        width: '100%', 
+        display: 'flex', 
+        flexDirection: 'column', 
+        alignItems: 'center',
+        overflow: 'auto', // Add scrolling here instead
+      }}>
         <img
           src={selectedImage}
           alt={selectedTitle}
           style={{
             maxWidth: '100%',
-            maxHeight: isMobile ? '80vh' : '85vh', // Increased from 70vh/80vh
-            minHeight: isMobile ? '250px' : '350px', // Added minimum height
-            width: 'auto',
-            height: 'auto',
+            maxHeight: '75vh',
             objectFit: 'contain',
             display: 'block',
+            borderRadius: '8px',
           }}
         />
-      </Box>
-      
-      {/* Caption container */}
-      <Box 
-        sx={{ 
-          p: 2, 
-          width: '100%',
-          backgroundColor: 'background.paper',
-        }}
-      >
-        <Typography variant="h6" sx={{ textAlign: 'center' }}>
+
+        <Typography
+          variant="h6"
+          sx={{ 
+            mt: 2,
+            fontFamily: 'Playfair Display',
+            textAlign: 'center',
+          }}
+        >
           {selectedTitle}
         </Typography>
+
         {selectedDescription && (
           <Typography
             variant="body1"
             color="text.secondary"
-            sx={{
-              mt: 1,
+            sx={{ 
+              mt: 1, 
               textAlign: 'center',
+              overflowWrap: 'break-word',
+              wordBreak: 'break-all', // This is key for sequences without spaces
+              hyphens: 'auto',
+              width: '100%',
+              maxWidth: '100%',
+              px: 2,
             }}
           >
             {selectedDescription}
