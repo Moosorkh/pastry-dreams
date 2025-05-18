@@ -26,7 +26,7 @@ export default function Gallery() {
   const [selectedImage, setSelectedImage] = useState('');
   const [selectedTitle, setSelectedTitle] = useState('');
   const [selectedDescription, setSelectedDescription] = useState('');
-  const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
+  const [, setImageSize] = useState({ width: 0, height: 0 });
   const [modalDimensions, setModalDimensions] = useState({ width: '90vw', maxHeight: '90vh' });
 
   const theme = useTheme();
