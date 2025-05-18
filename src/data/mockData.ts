@@ -266,7 +266,7 @@ export const galleryItems: GalleryItem[] = [
     category: "Cakes",
     featured: false,
     description:
-      'A decadent chocolate drip cake adorned with rich rosette piping and elegant golden "Happy 80th" toppers, perfect for celebrating a milestone birthday in style.',
+      'Decadent chocolate drip cake with rosette piping',
   },
   {
     id: "5",

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import {
   Box,
@@ -16,6 +15,7 @@ import {
   IconButton,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
 import { galleryItems } from '../data/mockData';
 
 const categories = ['All', 'Cakes', 'Pastries', 'Breads', 'Desserts', 'Custom Orders'];
@@ -23,15 +23,17 @@ const categories = ['All', 'Cakes', 'Pastries', 'Breads', 'Desserts', 'Custom Or
 export default function Gallery() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [modalOpen, setModalOpen] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedImage, setSelectedImage] = useState('');
   const [selectedTitle, setSelectedTitle] = useState('');
   const [selectedDescription, setSelectedDescription] = useState('');
-  const [, setImageSize] = useState({ width: 0, height: 0 });
+  const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
   const [modalDimensions, setModalDimensions] = useState({ width: '90vw', maxHeight: '90vh' });
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));
 
   const handleCategoryChange = (_event: React.MouseEvent<HTMLElement>, newCategory: string) => {
     if (newCategory !== null) {
@@ -44,16 +46,20 @@ export default function Gallery() {
       ? galleryItems
       : galleryItems.filter((item) => item.category === selectedCategory);
 
-  const handleOpenModal = (src: string, alt: string, description: string = '') => {
-    setSelectedImage(src);
-    setSelectedTitle(alt);
-    setSelectedDescription(description);
+  const handleOpenModal = (index: number) => {
+    const item = filteredItems[index];
+    setSelectedImage(item.src);
+    setSelectedTitle(item.alt);
+    setSelectedDescription(item.description || '');
+    setCurrentIndex(index);
     setModalOpen(true);
   };
 
-  const handleCloseModal = () => {
-    setModalOpen(false);
-  };
+  const handleCloseModal = () => setModalOpen(false);
+
+  const showNextImage = () => handleOpenModal((currentIndex + 1) % filteredItems.length);
+  const showPreviousImage = () =>
+    handleOpenModal((currentIndex - 1 + filteredItems.length) % filteredItems.length);
 
   // Function to handle image loading and calculate appropriate modal size
   const handleImageLoad = (event: React.SyntheticEvent<HTMLImageElement>) => {
@@ -63,24 +69,52 @@ export default function Gallery() {
     setImageSize({ width: naturalWidth, height: naturalHeight });
     
     // Calculate modal dimensions based on image ratio and viewport
-    const viewportWidth = window.innerWidth * 0.9; // 90% of viewport width
-    const viewportHeight = window.innerHeight * 0.85; // 85% of viewport height
+    const viewportWidth = window.innerWidth * (isMobile ? 0.95 : 0.9);
+    const viewportHeight = window.innerHeight * (isMobile ? 0.9 : 0.85);
+    
+    // Account for navigation controls and text
+    const controlsWidth = isMobile ? 100 : 120; // Space for arrows on each side
+    const textHeight = selectedDescription ? (isMobile ? 100 : 120) : 60; // Space for title and description
     
     // Determine which dimension constrains the image more
-    const widthRatio = viewportWidth / naturalWidth;
-    const heightRatio = (viewportHeight - 120) / naturalHeight; // Account for text space
+    const widthRatio = (viewportWidth - controlsWidth) / naturalWidth;
+    const heightRatio = (viewportHeight - textHeight) / naturalHeight;
     
     // Use the smaller ratio to ensure image fits in viewport
     const limitingRatio = Math.min(widthRatio, heightRatio, 1); // Don't enlarge small images
     
     // Calculate modal dimensions, ensuring a minimum width for text
-    const modalWidth = Math.max(Math.min(naturalWidth * limitingRatio, viewportWidth), isMobile ? viewportWidth : 400);
+    const modalWidth = Math.max(
+      Math.min(naturalWidth * limitingRatio + (isMobile ? 40 : controlsWidth), viewportWidth), 
+      isMobile ? viewportWidth * 0.95 : 400
+    );
     
     setModalDimensions({
       width: modalWidth + 'px',
       maxHeight: viewportHeight + 'px'
     });
   };
+
+  // Handle keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!modalOpen) return;
+      
+      if (e.key === 'ArrowRight') {
+        showNextImage();
+        e.preventDefault();
+      } else if (e.key === 'ArrowLeft') {
+        showPreviousImage();
+        e.preventDefault();
+      } else if (e.key === 'Escape') {
+        handleCloseModal();
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [modalOpen, currentIndex, filteredItems]);
 
   // Recalculate dimensions on window resize
   useEffect(() => {
@@ -92,14 +126,19 @@ export default function Gallery() {
           const { naturalWidth, naturalHeight } = img;
           
           // Recalculate using the same logic as handleImageLoad
-          const viewportWidth = window.innerWidth * 0.9;
-          const viewportHeight = window.innerHeight * 0.85;
+          const viewportWidth = window.innerWidth * (isMobile ? 0.95 : 0.9);
+          const viewportHeight = window.innerHeight * (isMobile ? 0.9 : 0.85);
+          const controlsWidth = isMobile ? 100 : 120;
+          const textHeight = selectedDescription ? (isMobile ? 100 : 120) : 60;
           
-          const widthRatio = viewportWidth / naturalWidth;
-          const heightRatio = (viewportHeight - 120) / naturalHeight;
+          const widthRatio = (viewportWidth - controlsWidth) / naturalWidth;
+          const heightRatio = (viewportHeight - textHeight) / naturalHeight;
           
           const limitingRatio = Math.min(widthRatio, heightRatio, 1);
-          const modalWidth = Math.max(Math.min(naturalWidth * limitingRatio, viewportWidth), isMobile ? viewportWidth : 400);
+          const modalWidth = Math.max(
+            Math.min(naturalWidth * limitingRatio + (isMobile ? 40 : controlsWidth), viewportWidth), 
+            isMobile ? viewportWidth * 0.95 : 400
+          );
           
           setModalDimensions({
             width: modalWidth + 'px',
@@ -112,7 +151,7 @@ export default function Gallery() {
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [modalOpen, selectedImage, isMobile]);
+  }, [modalOpen, selectedImage, isMobile, selectedDescription]);
 
   return (
     <Container maxWidth="xl">
@@ -129,7 +168,7 @@ export default function Gallery() {
           Explore our handcrafted pastries, custom cakes, and breads.
         </Typography>
 
-        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 6 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 6, flexWrap: 'wrap' }}>
           <ToggleButtonGroup
             value={selectedCategory}
             exclusive
@@ -147,11 +186,11 @@ export default function Gallery() {
 
         <ImageList
           variant="masonry"
-          cols={isMobile ? 1 : isTablet ? 2 : 4}
+          cols={isMobile ? 1 : isTablet ? 2 : isLargeScreen ? 4 : 3}
           gap={16}
           sx={{ overflow: 'hidden', m: 0 }}
         >
-          {filteredItems.map((item) => (
+          {filteredItems.map((item, index) => (
             <ImageListItem
               key={item.id}
               sx={{
@@ -162,19 +201,20 @@ export default function Gallery() {
                 position: 'relative',
                 '&:hover .overlay': { opacity: 1 },
                 '& img': {
-                  transition: 'transform 0.3s',
+                  transition: 'transform 0.3s ease',
+                  width: '100%',
+                  display: 'block',
                 },
                 '&:hover img': {
-                  transform: 'scale(1.02)',
+                  transform: 'scale(1.05)',
                 },
               }}
-              onClick={() => handleOpenModal(item.src, item.alt, item.description || '')}
+              onClick={() => handleOpenModal(index)}
             >
               <img
                 src={item.src}
                 alt={item.alt}
                 loading="lazy"
-                style={{ width: '100%', display: 'block' }}
               />
               <Box
                 className="overlay"
@@ -188,7 +228,7 @@ export default function Gallery() {
                   px: 2,
                   py: 1,
                   opacity: 0,
-                  transition: 'opacity 0.3s',
+                  transition: 'opacity 0.3s ease',
                 }}
               >
                 <Typography variant="subtitle1">{item.alt}</Typography>
@@ -204,7 +244,7 @@ export default function Gallery() {
           ))}
         </ImageList>
 
-        {/* Enhanced Modal with adaptive sizing and better text handling */}
+        {/* Enhanced Modal with Navigation */}
         <Modal
           open={modalOpen}
           onClose={handleCloseModal}
@@ -229,9 +269,10 @@ export default function Gallery() {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
+                outline: 'none', // Remove focus outline
               }}
             >
-              {/* Close button */}
+              {/* Close button with dark background */}
               <IconButton
                 onClick={handleCloseModal}
                 aria-label="close"
@@ -239,16 +280,62 @@ export default function Gallery() {
                   position: 'absolute',
                   right: 8,
                   top: 8,
-                  color: 'text.secondary',
-                  bgcolor: 'rgba(255,255,255,0.7)',
-                  zIndex: 2,
+                  color: 'white',
+                  bgcolor: 'rgba(0,0,0,0.7)',
+                  zIndex: 3, // Above navigation buttons
                   '&:hover': {
-                    bgcolor: 'rgba(255,255,255,0.9)',
+                    bgcolor: 'rgba(0,0,0,0.9)',
                   },
+                  width: 36,
+                  height: 36,
                 }}
                 size="small"
               >
-                <CloseIcon />
+                <CloseIcon fontSize="small" />
+              </IconButton>
+              
+              {/* Previous Image button with dark background */}
+              <IconButton
+                onClick={showPreviousImage}
+                aria-label="previous image"
+                sx={{
+                  position: 'absolute',
+                  left: { xs: 4, sm: 8, md: 16 },
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  bgcolor: 'rgba(0,0,0,0.7)',
+                  color: 'white',
+                  '&:hover': {
+                    bgcolor: 'rgba(0,0,0,0.9)',
+                  },
+                  zIndex: 2,
+                  width: { xs: 32, sm: 40 },
+                  height: { xs: 32, sm: 40 },
+                }}
+              >
+                <ArrowBackIos fontSize={isMobile ? "small" : "medium"} />
+              </IconButton>
+
+              {/* Next Image button with dark background */}
+              <IconButton
+                onClick={showNextImage}
+                aria-label="next image"
+                sx={{
+                  position: 'absolute',
+                  right: { xs: 4, sm: 8, md: 16 },
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  bgcolor: 'rgba(0,0,0,0.7)',
+                  color: 'white',
+                  '&:hover': {
+                    bgcolor: 'rgba(0,0,0,0.9)',
+                  },
+                  zIndex: 2,
+                  width: { xs: 32, sm: 40 },
+                  height: { xs: 32, sm: 40 },
+                }}
+              >
+                <ArrowForwardIos fontSize={isMobile ? "small" : "medium"} />
               </IconButton>
               
               {/* Image container */}
@@ -257,7 +344,8 @@ export default function Gallery() {
                   position: 'relative', 
                   width: '100%', 
                   textAlign: 'center',
-                  mb: 2
+                  mb: 2,
+                  mt: 1
                 }}
               >
                 <img
@@ -266,7 +354,7 @@ export default function Gallery() {
                   onLoad={handleImageLoad}
                   style={{
                     maxWidth: '100%',
-                    maxHeight: isMobile ? '65vh' : '70vh',
+                    maxHeight: isMobile ? '60vh' : '64vh',
                     objectFit: 'contain',
                     display: 'block',
                     margin: '0 auto',
@@ -289,7 +377,7 @@ export default function Gallery() {
                 {selectedTitle}
               </Typography>
               
-              {/* Description with better text handling */}
+              {/* Description with improved text handling */}
               {selectedDescription && (
                 <Typography
                   variant="body1"
@@ -298,6 +386,7 @@ export default function Gallery() {
                     width: '100%',
                     textAlign: 'center',
                     hyphens: 'auto',
+                    whiteSpace: 'pre-wrap', // Preserve line breaks
                     overflowWrap: 'break-word',
                     wordWrap: 'break-word',
                     wordBreak: 'normal',
