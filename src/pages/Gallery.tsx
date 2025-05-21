@@ -363,7 +363,7 @@ export default function Gallery() {
                 />
               </Box>
               
-              {/* Title section */}
+              {/* Title section improved*/}
               <Typography 
                 variant="h6" 
                 component="h3"
