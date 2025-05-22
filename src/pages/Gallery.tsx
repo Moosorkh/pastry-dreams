@@ -114,19 +114,7 @@ export default function Gallery() {
     handleOpenModal(newIndex);
   }, [currentIndex, filteredItems.length]);
 
-  const handleZoomIn = () => setZoomLevel(prev => Math.min(prev + 0.5, 3));
-  const handleZoomOut = () => setZoomLevel(prev => Math.max(prev - 0.5, 0.5));
-  const handleResetZoom = () => setZoomLevel(1);
 
-  const toggleFullscreen = () => {
-    if (!document.fullscreenElement && modalRef.current) {
-      modalRef.current.requestFullscreen?.();
-      setIsFullscreen(true);
-    } else if (document.exitFullscreen) {
-      document.exitFullscreen();
-      setIsFullscreen(false);
-    }
-  };
 
   // Handle image loading states
   const handleImageLoadStart = (src: string) => {
