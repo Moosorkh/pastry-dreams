@@ -386,7 +386,7 @@ export default function Gallery() {
                     width: '100%',
                     textAlign: 'center',
                     hyphens: 'auto',
-                    whiteSpace: 'pre-wrap', // Preserve line breaks
+                    whiteSpace: 'pre-wrap', 
                     overflowWrap: 'break-word',
                     wordWrap: 'break-word',
                     wordBreak: 'normal',
