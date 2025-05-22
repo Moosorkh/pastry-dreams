@@ -41,12 +41,12 @@ export default function Gallery() {
   const [selectedImage, setSelectedImage] = useState('');
   const [selectedTitle, setSelectedTitle] = useState('');
   const [selectedDescription, setSelectedDescription] = useState('');
-  const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
+  const [, setImageSize] = useState({ width: 0, height: 0 });
   const [modalDimensions, setModalDimensions] = useState({ width: '90vw', maxHeight: '90vh' });
   const [loadingImages, setLoadingImages] = useState<Set<string>>(new Set());
   const [errorImages, setErrorImages] = useState<Set<string>>(new Set());
-  const [zoomLevel, setZoomLevel] = useState(1);
-  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [, setZoomLevel] = useState(1);
+  const [, setIsFullscreen] = useState(false);
   const [touchState, setTouchState] = useState<TouchState | null>(null);
   const [preloadedImages, setPreloadedImages] = useState<Set<string>>(new Set());
 
