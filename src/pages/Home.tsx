@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import {
   Box,
@@ -38,13 +38,13 @@ import {
   Restaurant as KitchenIcon,
   Celebration as CelebrationIcon,
   KeyboardDoubleArrowUp as KeyboardDoubleArrowUpIcon,
+  Pause as PauseIcon,
+  PlayArrow as PlayArrowIcon,
 } from '@mui/icons-material';
 import { galleryItems } from '../data/mockData';
 import bannerImage from '../../public/banner-image.png';
 import maryProfileImage from '../assets/mary-kitchen.png';
 import theme from '../theme';
-
-
 
 // Core skills from resume
 const coreSkills = [
@@ -97,7 +97,6 @@ const achievements = [
     icon: <SchoolIcon />,
   },
 ];
-
 // ScrollToTop button component
 function ScrollToTop() {
   const trigger = useScrollTrigger({
@@ -124,7 +123,17 @@ function ScrollToTop() {
           zIndex: 1000,
         }}
       >
-        <Fab color="primary" size="small" aria-label="scroll back to top">
+        <Fab
+          color="primary"
+          size="small"
+          aria-label="scroll back to top"
+          sx={{
+            transition: 'transform 0.2s ease',
+            '&:hover': {
+              transform: 'translateY(-4px)'
+            }
+          }}
+        >
           <KeyboardDoubleArrowUpIcon />
         </Fab>
       </Box>
@@ -139,46 +148,47 @@ export default function Home() {
   const [slideDirection, setSlideDirection] = useState('left');
   const [isTransitioning, setIsTransitioning] = useState(false);
 
+  // Fixed pause state management - separated manual and hover pause
+  const [isManuallyPaused, setIsManuallyPaused] = useState(false);
+  const [isHoverPaused, setIsHoverPaused] = useState(false);
+  const isPaused = isManuallyPaused || isHoverPaused;
+
   // Touch event states for swipeable carousel
-  const [touchStart, setTouchStart] = useState<number>(0);
-  const [touchEnd, setTouchEnd] = useState<number>(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const [swipeProgress, setSwipeProgress] = useState<number>(0);
+  const progressKey = `${activeSlide}-${isPaused}`;
+
 
   const aboutSectionRef = useRef<HTMLDivElement>(null);
   const journeySectionRef = useRef<HTMLDivElement>(null);
   const skillsSectionRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
+  const timerRef = useRef<number | null>(null);
+
   const location = useLocation();
   const [profileModalOpen, setProfileModalOpen] = useState(false);
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  // Add these handler functions
-  const handleOpenProfileModal = () => {
-    setProfileModalOpen(true);
-  };
-
-  const handleCloseProfileModal = () => {
-    setProfileModalOpen(false);
-  };
-
   // Define minimum swipe distance (in pixels)
   const minSwipeDistance = 50;
-
-  useEffect(() => {
-    if (location.hash === '#journey') {
-      journeySectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-      setShowFullJourney(true);
-    }
-  }, [location]);
-
-  const displayedAchievements = showFullJourney ? achievements : achievements.slice(0, 2);
 
   // Featured items for carousel from gallery
   const featuredItems = galleryItems
     .filter(item => item.featured === true)
     .slice(0, 6);
 
-  const handleNextSlide = () => {
+  const displayedAchievements = showFullJourney ? achievements : achievements.slice(0, 2);
+  // Handler functions with useCallback to prevent unnecessary re-renders
+  const handleOpenProfileModal = useCallback(() => {
+    setProfileModalOpen(true);
+  }, []);
+
+  const handleCloseProfileModal = useCallback(() => {
+    setProfileModalOpen(false);
+  }, []);
+
+  const handleNextSlide = useCallback(() => {
     if (isTransitioning) return;
 
     setIsTransitioning(true);
@@ -187,12 +197,17 @@ export default function Home() {
     setActiveSlide((prev) => (prev === featuredItems.length - 1 ? 0 : prev + 1));
 
     // Reset transitioning state after animation completes
-    setTimeout(() => {
+    const timer = window.setTimeout(() => {
       setIsTransitioning(false);
     }, 500);
-  };
 
-  const handlePrevSlide = () => {
+    // Clean up the timer if the component unmounts during transition
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [activeSlide, isTransitioning, featuredItems.length]);
+
+  const handlePrevSlide = useCallback(() => {
     if (isTransitioning) return;
 
     setIsTransitioning(true);
@@ -201,12 +216,17 @@ export default function Home() {
     setActiveSlide((prev) => (prev === 0 ? featuredItems.length - 1 : prev - 1));
 
     // Reset transitioning state after animation completes
-    setTimeout(() => {
+    const timer = window.setTimeout(() => {
       setIsTransitioning(false);
     }, 500);
-  };
 
-  const handleDotClick = (index: number) => {
+    // Clean up the timer if the component unmounts during transition
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [activeSlide, isTransitioning, featuredItems.length]);
+
+  const handleDotClick = useCallback((index: number) => {
     if (isTransitioning || index === activeSlide) return;
 
     setIsTransitioning(true);
@@ -215,31 +235,42 @@ export default function Home() {
     setActiveSlide(index);
 
     // Reset transitioning state after animation completes
-    setTimeout(() => {
+    const timer = window.setTimeout(() => {
       setIsTransitioning(false);
     }, 500);
-  };
+
+    // Clean up the timer if the component unmounts during transition
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [activeSlide, isTransitioning]);
+
+  // Fixed toggle pause function
+  const togglePause = useCallback(() => {
+    setIsManuallyPaused(prev => !prev);
+  }, []);
 
   // Touch handlers for swipeable carousel
-  const handleTouchStart = (e: React.TouchEvent) => {
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
     setTouchStart(e.targetTouches[0].clientX);
-  };
+    setTouchEnd(null); // Reset end touch when starting new touch
+  }, []);
 
-  const handleTouchMove = (e: React.TouchEvent) => {
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (!touchStart) return;
+
     const currentX = e.targetTouches[0].clientX;
     setTouchEnd(currentX);
 
     // Calculate swipe progress as a percentage for visual feedback
-    if (touchStart) {
-      const diff = touchStart - currentX;
-      // Limit the progress to between -25 and 25 percent
-      const progress = Math.max(-25, Math.min(25, (diff / window.innerWidth) * 100));
-      setSwipeProgress(progress);
-    }
-  };
+    const diff = touchStart - currentX;
+    // Limit the progress to between -25 and 25 percent
+    const progress = Math.max(-25, Math.min(25, (diff / window.innerWidth) * 100));
+    setSwipeProgress(progress);
+  }, [touchStart]);
 
-  const handleTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
+  const handleTouchEnd = useCallback(() => {
+    if (!touchStart || touchEnd === null) return;
 
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > minSwipeDistance;
@@ -252,10 +283,26 @@ export default function Home() {
     }
 
     // Reset all touch values
-    setTouchEnd(0);
-    setTouchStart(0);
+    setTouchEnd(null);
+    setTouchStart(null);
     setSwipeProgress(0);
-  };
+  }, [touchStart, touchEnd, isTransitioning, handleNextSlide, handlePrevSlide, minSwipeDistance]);
+
+  // Handle carousel hover/focus events - Fixed function
+  const handleCarouselInteraction = useCallback((isPausing: boolean) => {
+    setIsHoverPaused(isPausing);
+  }, []);
+
+  // Toggle journey display
+  const toggleJourneyDisplay = useCallback(() => {
+    setShowFullJourney(prev => !prev);
+  }, []);
+  useEffect(() => {
+    if (location.hash === '#journey') {
+      journeySectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+      setShowFullJourney(true);
+    }
+  }, [location]);
 
   // Keyboard navigation for carousel
   useEffect(() => {
@@ -265,6 +312,9 @@ export default function Home() {
           handlePrevSlide();
         } else if (e.key === 'ArrowRight') {
           handleNextSlide();
+        } else if (e.key === ' ') {
+          e.preventDefault(); // Prevent page scroll on space
+          togglePause();
         }
       }
     };
@@ -273,19 +323,34 @@ export default function Home() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [activeSlide, isTransitioning]);
+  }, [handlePrevSlide, handleNextSlide, togglePause]);
 
-  // Auto-advance slides
+  // Fixed Auto-advance slides effect
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (!document.hidden && !isTransitioning) {
-        handleNextSlide();
+    // Clear any existing timer
+    if (timerRef.current) {
+      window.clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+
+    // Only set up timer if not paused and not transitioning
+    if (!isPaused && !isTransitioning) {
+      timerRef.current = window.setTimeout(() => {
+        // Check if document is still visible and component is still mounted
+        if (!document.hidden && !isPaused) {
+          handleNextSlide();
+        }
+      }, 5000); // Change slide every 5 seconds
+    }
+
+    // Cleanup function
+    return () => {
+      if (timerRef.current) {
+        window.clearTimeout(timerRef.current);
+        timerRef.current = null;
       }
-    }, 5000); // Change slide every 5 seconds
-
-    return () => clearInterval(interval); // Cleanup on unmount
-  }, [activeSlide, isTransitioning]);
-
+    };
+  }, [isPaused, isTransitioning, handleNextSlide]); // Removed activeSlide dependency
   return (
     <Box>
       {/* Hero Section */}
@@ -465,6 +530,7 @@ export default function Home() {
               closeAfterTransition
               slots={{ backdrop: Backdrop }}
               slotProps={{ backdrop: { timeout: 500 } }}
+              aria-labelledby="profile-modal-title"
             >
               <Fade in={profileModalOpen}>
                 <Box
@@ -485,6 +551,8 @@ export default function Home() {
                     flexDirection: 'column',
                     alignItems: 'center',
                   }}
+                  role="dialog"
+                  aria-modal="true"
                 >
                   <Box
                     sx={{
@@ -518,12 +586,12 @@ export default function Home() {
                     alt="Mary Karimzadeh - Pastry Chef"
                     sx={{
                       maxWidth: '100%',
-                      maxHeight: isMobile? 'calc(90vh - 60px)': 'calc(60vh - 60px)',
+                      maxHeight: isMobile ? 'calc(90vh - 60px)' : 'calc(60vh - 60px)',
                       borderRadius: 1,
                       boxShadow: 2,
                     }}
                   />
-                  <Typography variant="h6" sx={{ mt: 2, fontFamily: 'Playfair Display' }}>
+                  <Typography id="profile-modal-title" variant="h6" sx={{ mt: 2, fontFamily: 'Playfair Display' }}>
                     Mary Karimzadeh
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
@@ -535,7 +603,6 @@ export default function Home() {
           </Grid>
         </Grid>
       </Container>
-
       {/* Core Skills Section */}
       <Box sx={{ bgcolor: 'grey.50', py: 8 }} ref={skillsSectionRef}>
         <Container maxWidth="lg">
@@ -594,6 +661,7 @@ export default function Home() {
                         justifyContent: 'center',
                         alignItems: 'center',
                       }}
+                      aria-hidden="true"
                     >
                       {skill.icon}
                     </Box>
@@ -614,8 +682,7 @@ export default function Home() {
           </Grid>
         </Container>
       </Box>
-
-      {/* Featured Creations Carousel - IMPROVED with swipe */}
+      {/* Featured Creations Carousel - Enhanced with improved controls */}
       <Box sx={{ py: 8 }}>
         <Container maxWidth="lg">
           <Typography
@@ -643,7 +710,7 @@ export default function Home() {
             Featured Creations
           </Typography>
 
-          {/* Improved carousel with swipe functionality */}
+          {/* Enhanced carousel with improved pause/play functionality */}
           <Box
             sx={{
               position: 'relative',
@@ -659,16 +726,24 @@ export default function Home() {
             }}
             ref={carouselRef}
             tabIndex={0}
-            aria-label="Featured creations carousel"
+            aria-label={`Featured creations carousel. ${isManuallyPaused ? 'Paused' : 'Auto-playing'}. Use arrow keys to navigate.`}
             role="region"
+            aria-roledescription="carousel"
+            aria-live="polite"
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
+            onMouseEnter={() => handleCarouselInteraction(true)}
+            onMouseLeave={() => handleCarouselInteraction(false)}
+            onFocus={() => handleCarouselInteraction(true)}
+            onBlur={() => handleCarouselInteraction(false)}
           >
             {featuredItems.map((item, index) => (
               <Box
                 key={item.id}
                 aria-hidden={activeSlide !== index}
+                aria-roledescription="slide"
+                role="group"
                 aria-label={`Slide ${index + 1} of ${featuredItems.length}: ${item.alt}`}
                 sx={{
                   position: 'absolute',
@@ -703,6 +778,7 @@ export default function Home() {
                       component="img"
                       src={item.src}
                       alt={item.alt}
+                      loading="lazy"
                       sx={{
                         width: '100%',
                         height: '100%',
@@ -750,7 +826,6 @@ export default function Home() {
                 </Grid>
               </Box>
             ))}
-
             {/* Swipe indicator */}
             {swipeProgress !== 0 && (
               <Box
@@ -767,10 +842,34 @@ export default function Home() {
                   zIndex: 10,
                   opacity: Math.abs(swipeProgress) / 25,
                 }}
+                aria-hidden="true"
               >
                 {swipeProgress > 0 ? <KeyboardArrowLeftIcon fontSize="large" /> : <KeyboardArrowRightIcon fontSize="large" />}
               </Box>
             )}
+
+            {/* Enhanced Play/pause button */}
+            <IconButton
+              aria-label={isManuallyPaused ? "Play slideshow" : "Pause slideshow"}
+              sx={{
+                position: 'absolute',
+                left: { xs: 8, sm: 16 },
+                top: 16,
+                bgcolor: isManuallyPaused ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.5)',
+                color: isManuallyPaused ? 'primary.main' : 'white',
+                border: isManuallyPaused ? '2px solid' : 'none',
+                borderColor: 'primary.main',
+                '&:hover': {
+                  bgcolor: isManuallyPaused ? 'rgba(255,255,255,1)' : 'rgba(0,0,0,0.7)',
+                  transform: 'scale(1.1)',
+                },
+                zIndex: 10,
+                transition: 'all 0.2s ease',
+              }}
+              onClick={togglePause}
+            >
+              {isManuallyPaused ? <PlayArrowIcon /> : <PauseIcon />}
+            </IconButton>
 
             {/* Navigation arrows */}
             <IconButton
@@ -816,17 +915,50 @@ export default function Home() {
               <KeyboardArrowRightIcon fontSize="large" />
             </IconButton>
 
-            {/* Indicator dots */}
+            {/* Progress indicator - shows when auto-playing */}
+            {!isPaused && (
+              <Box
+                key={progressKey} // Triggers restart on each slide
+                sx={{
+                  position: 'absolute',
+                  bottom: { xs: 48, md: 48 },
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  width: '20%',
+                  height: 5,
+                  opacity: 0.5,
+                  bgcolor: 'rgba(255,255,255,0.3)',
+                  borderRadius: 1,
+                  overflow: 'hidden',
+                  zIndex: 10,
+                }}
+                aria-hidden="true"
+              >
+                <Box
+                  sx={{
+                    height: '100%',
+                    bgcolor: 'primary.main',
+                    animation: 'progress 5s linear forwards',
+                    '@keyframes progress': {
+                      '0%': { width: '0%' },
+                      '100%': { width: '100%' },
+                    },
+                  }}
+                />
+              </Box>
+            )}
+
+            {/* Enhanced Indicator dots with better visibility */}
             <Box
               sx={{
                 display: 'flex',
                 justifyContent: 'center',
                 position: 'absolute',
-                bottom: { xs: -9, md: 16 }, // Move below the card on mobile
+                bottom: { xs: 16, md: 16 },
                 left: 0,
                 right: 0,
                 zIndex: 10,
-                py: 2 // Add padding for better touch target
+                py: 2
               }}
               role="tablist"
               aria-label="Carousel navigation"
@@ -840,21 +972,25 @@ export default function Home() {
                   aria-selected={activeSlide === index}
                   aria-label={`Go to slide ${index + 1}`}
                   sx={{
-                    width: { xs: 10, md: 12 }, // Smaller on mobile
+                    width: { xs: 10, md: 12 },
                     height: { xs: 10, md: 12 },
                     borderRadius: '50%',
                     mx: 0.5,
-                    // Use a more visible color scheme
-                    bgcolor: index === activeSlide ? 'primary.main' : 'rgba(0,0,0,0.2)',
-                    border: '1px solid',
-                    borderColor: index === activeSlide ? 'primary.main' : 'rgba(0,0,0,0.1)',
+                    bgcolor: index === activeSlide ? 'primary.main' : 'rgba(255,255,255,0.6)',
+                    border: '2px solid',
+                    borderColor: index === activeSlide ? 'primary.main' : 'rgba(255,255,255,0.8)',
                     cursor: 'pointer',
                     transition: 'all 0.3s ease',
                     transform: index === activeSlide ? 'scale(1.2)' : 'scale(1)',
                     '&:hover': {
                       transform: 'scale(1.2)',
-                      bgcolor: index === activeSlide ? 'primary.main' : 'rgba(0,0,0,0.3)',
+                      bgcolor: index === activeSlide ? 'primary.main' : 'rgba(255,255,255,0.8)',
                     },
+                    '&:focus': {
+                      outline: '2px solid',
+                      outlineColor: 'primary.main',
+                      outlineOffset: '2px'
+                    }
                   }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
@@ -890,7 +1026,6 @@ export default function Home() {
           </Box>
         </Container>
       </Box>
-
       {/* Journey Timeline */}
       <Box sx={{ bgcolor: 'grey.50', py: 8 }} ref={journeySectionRef}>
         <Container maxWidth="lg">
@@ -978,7 +1113,7 @@ export default function Home() {
             <Button
               variant="outlined"
               color="primary"
-              onClick={() => setShowFullJourney(!showFullJourney)}
+              onClick={toggleJourneyDisplay}
               startIcon={showFullJourney ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
               sx={{
                 px: 3,
@@ -988,13 +1123,13 @@ export default function Home() {
                 },
               }}
               aria-expanded={showFullJourney}
+              aria-controls="journey-timeline"
             >
               {showFullJourney ? 'Show Less' : 'View Full Journey'}
             </Button>
           </Box>
         </Container>
       </Box>
-
       {/* Call to Action */}
       <Box sx={{ py: 8, textAlign: 'center' }}>
         <Container maxWidth="md">
