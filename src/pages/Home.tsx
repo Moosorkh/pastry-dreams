@@ -813,14 +813,26 @@ export default function Home() {
                       <Typography variant="body1" paragraph>
                         {item.description || "A handcrafted creation made with premium ingredients and expert techniques."}
                       </Typography>
-                      <Button
-                        variant="outlined"
-                        component={RouterLink}
-                        to="/gallery"
-                        sx={{ alignSelf: 'flex-start', mt: 'auto' }}
-                      >
-                        View in Gallery
-                      </Button>
+<Button
+  variant="outlined"
+  component={RouterLink}
+  to="/gallery"
+  sx={{
+    alignSelf: 'flex-start',
+    mt: 'auto',
+    position: 'relative',
+    zIndex: 2, // ensures it's above layout bleed
+    padding: '8px 16px',
+    minHeight: '44px', // improves tap target
+    bottom: 30,
+    '&:hover': {
+      backgroundColor: 'rgba(121, 0, 163, 0.08)',
+      borderColor: 'primary.main',
+    },
+  }}
+>
+  View in Gallery
+</Button>
                     </Box>
                   </Grid>
                 </Grid>
