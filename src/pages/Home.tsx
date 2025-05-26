@@ -930,7 +930,7 @@ export default function Home() {
             {/* Progress indicator - shows when auto-playing */}
             {!isPaused && (
               <Box
-                key={progressKey} // Triggers restart on each slide
+                key={progressKey}
                 sx={{
                   position: 'absolute',
                   bottom: { xs: 48, md: 48 },
