@@ -753,7 +753,7 @@ export default function Home() {
                   height: '100%',
                   opacity: activeSlide === index ? 1 : 0,
                   transform: `translateX(${activeSlide === index
-                    ? `${swipeProgress}%` // Apply swipe progress when active
+                    ? `${swipeProgress}%` 
                     : prevSlide === index && slideDirection === 'left'
                       ? '-100%'
                       : prevSlide === index && slideDirection === 'right'
