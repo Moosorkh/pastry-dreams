@@ -24,7 +24,7 @@ import {
 // You'll need to add this image to your assets folder
 // import maryProfileImage from '../assets/mary-kitchen.png';
 
-const AboutSection = forwardRef<HTMLDivElement>((props, ref) => {
+const AboutSection = forwardRef<HTMLDivElement>((_props, ref) => {
   const [profileModalOpen, setProfileModalOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
