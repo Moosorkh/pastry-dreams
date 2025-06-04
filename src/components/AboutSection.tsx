@@ -106,7 +106,7 @@ const AboutSection = forwardRef<HTMLDivElement>((_props, ref) => {
               border: '4px solid white',
               cursor: 'pointer',
               transition: 'transform 0.2s ease',
-              bgcolor: 'primary.light', // Fallback color
+              bgcolor: 'primary.light', 
               fontSize: '4rem',
               '&:hover': {
                 transform: 'scale(1.02)',
