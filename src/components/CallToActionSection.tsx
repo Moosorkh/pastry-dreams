@@ -1,4 +1,4 @@
-// Save as: src/components/CallToActionSection.tsx
+// this file defines a call-to-action section for a cake designer's website.
 
 import { Box, Container, Typography, Button } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
