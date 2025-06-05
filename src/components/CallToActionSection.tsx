@@ -51,5 +51,6 @@ export default function CallToActionSection() {
         </Button>
       </Container>
     </Box>
+    // This button links to the contact page where users can reach out for inquiries or orders.
   );
 }
