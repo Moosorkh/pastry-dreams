@@ -6,7 +6,6 @@ import { Link as RouterLink } from 'react-router-dom';
 // This component is a call-to-action section that encourages users to contact the cake designer.
 export default function CallToActionSection() {
   return (
-    // This section is designed to be visually appealing and encourage user interaction.
     <Box sx={{ py: 8, textAlign: 'center' }}>
       <Container maxWidth="md">
         <Typography
