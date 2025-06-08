@@ -3,7 +3,7 @@
 import { Box, Container, Typography, Button } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 
-// This component is a call-to-action section that encourages users to contact the cake designer.
+
 export default function CallToActionSection() {
   return (
     <Box sx={{ py: 8, textAlign: 'center' }}>
