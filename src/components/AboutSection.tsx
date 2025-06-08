@@ -21,7 +21,7 @@ import {
   KeyboardArrowRight as KeyboardArrowRightIcon,
 } from '@mui/icons-material';
 
-// You'll need to add this image to your assets folder
+
 // import maryProfileImage from '../assets/mary-kitchen.png';
 
 const AboutSection = forwardRef<HTMLDivElement>((_props, ref) => {
