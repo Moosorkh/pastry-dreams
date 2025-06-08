@@ -26,7 +26,6 @@ export default function CallToActionSection() {
         >
           Whether you're planning a special event or need a custom cake, I'm here to bring your sweet dreams to life.
         </Typography>
-        {/*  */}
         <Button
           variant="contained"
           color="primary"
