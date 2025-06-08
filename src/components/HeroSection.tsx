@@ -3,7 +3,7 @@
 import { Box, Container, Typography, Button, Paper } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 
-// You'll need to add this image to your assets folder
+
 // import bannerImage from '../assets/banner-image.png';
 
 export default function HeroSection() {
