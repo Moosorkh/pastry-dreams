@@ -7,7 +7,7 @@ import {
   KeyboardArrowRight as KeyboardArrowRightIcon,
   KeyboardArrowLeft as KeyboardArrowLeftIcon,
 } from '@mui/icons-material';
-import { galleryItems } from '../data/mockData';
+import { galleryItems } from '../../data/mockData';
 
 export default function FeaturedCarouselSection() {
   const [activeSlide, setActiveSlide] = useState(0);
