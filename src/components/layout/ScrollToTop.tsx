@@ -1,5 +1,4 @@
-// Save as: src/components/layout/ScrollToTop.tsx
-// this component provides a floating button that scrolls the page back to the top when clicked. It uses Material-UI's `useScrollTrigger` hook to determine when to show the button based on the scroll position.
+
 import { Box, Fab, useScrollTrigger, Zoom } from '@mui/material';
 import { KeyboardDoubleArrowUp as KeyboardDoubleArrowUpIcon } from '@mui/icons-material';
 
