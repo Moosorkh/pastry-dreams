@@ -11,6 +11,7 @@ import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import { achievements } from '../../data/homeData';
+import React from 'react';
 
 interface JourneyTimelineSectionProps {
   initialShowFull?: boolean;
@@ -69,7 +70,7 @@ const JourneyTimelineSection = forwardRef<HTMLDivElement, JourneyTimelineSection
               <TimelineItem key={index}>
                 <TimelineSeparator>
                   <TimelineDot color="primary" variant="outlined">
-                    {achievement.icon}
+                    {achievement.icon && React.createElement(achievement.icon)}
                   </TimelineDot>
                   {index < displayedAchievements.length - 1 && <TimelineConnector />}
                 </TimelineSeparator>
