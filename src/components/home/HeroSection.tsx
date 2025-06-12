@@ -93,7 +93,7 @@ export default function HeroSection() {
                 borderColor: 'white',
                 backgroundColor: 'rgba(255,255,255,0.15)',
                 transform: 'translateY(-2px)',
-                boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.41)',
               },
               transition: 'all 0.3s ease',
             }}
